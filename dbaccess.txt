@@ -1,0 +1,3 @@
+ghabryelhenrique_db_user
+iTevbpl2GmM2tc2f
+mongodb+srv://ghabryelhenrique_db_user:iTevbpl2GmM2tc2f@cluster0.bnqhryp.mongodb.net/
