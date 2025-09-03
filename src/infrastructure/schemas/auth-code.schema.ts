@@ -25,6 +25,6 @@ export class AuthCodeDocument extends Document {
 export const AuthCodeSchema = SchemaFactory.createForClass(AuthCodeDocument);
 
 // Indexes for better query performance and TTL
-AuthCodeSchema.index({ email: 1 });
+// Note: email index is already created by unique: true property
 AuthCodeSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 }); // TTL index
 AuthCodeSchema.index({ createdAt: -1 });

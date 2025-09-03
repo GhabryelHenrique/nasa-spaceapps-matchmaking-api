@@ -2,12 +2,13 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { GoogleSheetsUserRepositoryAdapter } from './adapters/google-sheets-user-repository.adapter';
 import { MongoDBAuthCodeRepositoryAdapter } from './adapters/mongodb-auth-code-repository.adapter';
+import { MongoDBParticipantProfileRepositoryAdapter } from './adapters/mongodb-participant-profile-repository.adapter';
 import { NodemailerEmailServiceAdapter } from './adapters/nodemailer-email-service.adapter';
 import { NestJSLoggerAdapter } from './adapters/nestjs-logger.adapter';
-import { InMemoryParticipantProfileRepositoryAdapter } from './adapters/in-memory-participant-profile-repository.adapter';
 import { InMemoryTeamMatchRepositoryAdapter } from './adapters/in-memory-team-match-repository.adapter';
 import { SimpleMatchmakingAlgorithmAdapter } from './adapters/simple-matchmaking-algorithm.adapter';
 import { AuthCodeDocument, AuthCodeSchema } from './schemas/auth-code.schema';
+import { ParticipantProfileDocument, ParticipantProfileSchema } from './schemas/participant-profile.schema';
 import {
   USER_REPOSITORY_TOKEN,
   AUTH_CODE_REPOSITORY_TOKEN,
@@ -22,6 +23,7 @@ import {
   imports: [
     MongooseModule.forFeature([
       { name: AuthCodeDocument.name, schema: AuthCodeSchema },
+      { name: ParticipantProfileDocument.name, schema: ParticipantProfileSchema },
     ]),
   ],
   providers: [
@@ -43,7 +45,7 @@ import {
     },
     {
       provide: PARTICIPANT_PROFILE_REPOSITORY_TOKEN,
-      useClass: InMemoryParticipantProfileRepositoryAdapter,
+      useClass: MongoDBParticipantProfileRepositoryAdapter,
     },
     {
       provide: TEAM_MATCH_REPOSITORY_TOKEN,

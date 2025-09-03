@@ -33,6 +33,17 @@ export interface Preferences {
   interests: string[];
 }
 
+export interface GoogleSheetsData {
+  timestamp?: string;
+  phone?: string;
+  cpf?: string;
+  city?: string;
+  birthDate?: string;
+  participationMode?: string;
+  howDidYouKnow?: string;
+  areasOfInterest?: string;
+}
+
 export class ParticipantProfile {
   constructor(
     public readonly id: string,
@@ -52,6 +63,7 @@ export class ParticipantProfile {
     public readonly bio?: string,
     public readonly participationGoals?: string[],
     public readonly challengesInterests?: string[],
+    public readonly googleSheetsData?: GoogleSheetsData,
     public readonly createdAt: Date = new Date(),
     public readonly updatedAt: Date = new Date(),
   ) {}
@@ -73,6 +85,7 @@ export class ParticipantProfile {
     bio?: string;
     participationGoals?: string[];
     challengesInterests?: string[];
+    googleSheetsData?: GoogleSheetsData;
   }): ParticipantProfile {
     return new ParticipantProfile(
       data.email.value, // Using email as ID for simplicity
@@ -92,6 +105,7 @@ export class ParticipantProfile {
       data.bio,
       data.participationGoals,
       data.challengesInterests,
+      data.googleSheetsData,
     );
   }
 
@@ -114,6 +128,7 @@ export class ParticipantProfile {
       data.bio ?? this.bio,
       data.participationGoals ?? this.participationGoals,
       data.challengesInterests ?? this.challengesInterests,
+      data.googleSheetsData ?? this.googleSheetsData,
       this.createdAt,
       new Date(),
     );
@@ -193,6 +208,7 @@ export class ParticipantProfile {
       bio: this.bio,
       participationGoals: this.participationGoals,
       challengesInterests: this.challengesInterests,
+      googleSheetsData: this.googleSheetsData,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString(),
       // ML features

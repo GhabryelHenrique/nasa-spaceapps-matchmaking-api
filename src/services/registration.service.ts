@@ -83,6 +83,7 @@ export class RegistrationService {
     // Check if participant profile already exists
     let profileCreated = false;
     const profileExists = await this.participantProfileService.profileExists(emailString);
+    console.log('Profile exists:', profileExists);
     
     if (!profileExists) {
       // Create basic profile automatically
@@ -105,6 +106,10 @@ export class RegistrationService {
   }
 
   private async createBasicProfile(email: string, fullName: string): Promise<void> {
+    const user = await this.getUserInfo(email);
+
+    console.log('User info:', user);
+
     const basicProfileData = {
       email,
       fullName,
@@ -113,11 +118,17 @@ export class RegistrationService {
       workExperience: [],
       education: '', // Will be filled by user
       projects: [],
-      availability: 20, // Default 20 hours per week
+      availability: {
+        hoursPerWeek: 20, // Default 20 hours per week
+        timezone: 'America/Sao_Paulo', // Default timezone for Brazil
+        preferredWorkingHours: '9-17', // Default working hours
+        availableDates: [], // Will be filled by user
+      },
       preferences: {
-        teamSize: 4, // Default team size
-        projectType: '', // Will be filled by user
-        workStyle: '', // Will be filled by user
+        teamSize: 'medium', // Default team size
+        projectType: [], // Will be filled by user
+        communicationStyle: 'collaborative', // Default communication style
+        workStyle: 'contributor', // Default work style
         interests: [],
       },
       languages: ['Portuguese'], // Default language
