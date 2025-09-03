@@ -5,7 +5,9 @@
       "Bash(npm run lint)",
       "Bash(npm install:*)",
       "Bash(npm run start:dev:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npm test)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []

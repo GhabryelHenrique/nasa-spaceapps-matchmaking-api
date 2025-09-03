@@ -1,7 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-@Schema({ timestamps: true })
+@Schema({ 
+  timestamps: true,
+  collection: 'authcodes'
+})
 export class AuthCodeDocument extends Document {
   @Prop({ required: true, unique: true })
   email: string;
@@ -25,6 +28,6 @@ export class AuthCodeDocument extends Document {
 export const AuthCodeSchema = SchemaFactory.createForClass(AuthCodeDocument);
 
 // Indexes for better query performance and TTL
-// Note: email index is already created by unique: true property
+
 AuthCodeSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 }); // TTL index
 AuthCodeSchema.index({ createdAt: -1 });

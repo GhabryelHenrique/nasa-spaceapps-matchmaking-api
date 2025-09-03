@@ -1,4 +1,5 @@
 export const USER_REPOSITORY_TOKEN = Symbol('UserRepositoryPort');
+export const USER_REPOSITORY_MONGODB_TOKEN = Symbol('UserRepositoryMongoDBPort');
 export const AUTH_CODE_REPOSITORY_TOKEN = Symbol('AuthCodeRepositoryPort');
 export const EMAIL_SERVICE_TOKEN = Symbol('EmailServicePort');
 export const LOGGER_TOKEN = Symbol('LoggerPort');
