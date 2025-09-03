@@ -26,6 +26,12 @@ export interface GetUserInfoResult {
   user?: any;
 }
 
+export interface GetUserProfileResult {
+  email: string;
+  profileFound: boolean;
+  user?: any;
+}
+
 @Injectable()
 export class RegistrationService {
   constructor(
@@ -71,7 +77,15 @@ export class RegistrationService {
       };
     }
 
-    const user = await this.userService.getUserByEmail(email);
+    // Import user data from Google Sheets to MongoDB during verification
+    let user: any;
+    try {
+      user = await this.userService.importUserToMongoDB(email);
+    } catch {
+      // Continue with Google Sheets data as fallback
+      user = await this.userService.getUserByEmail(email);
+    }
+    
     if (!user) {
       return {
         email: emailString,
@@ -143,6 +157,26 @@ export class RegistrationService {
     return {
       email: emailString,
       isRegistered: true,
+      user: user.toJSON(),
+    };
+  }
+
+  async getUserProfile(emailString: string): Promise<GetUserProfileResult> {
+    const email = new Email(emailString);
+    
+    // First try to get user from MongoDB (imported data)
+    const user = await this.userService.getUserFromMongoDB(email);
+
+    if (!user) {
+      return {
+        email: emailString,
+        profileFound: false,
+      };
+    }
+
+    return {
+      email: emailString,
+      profileFound: true,
       user: user.toJSON(),
     };
   }

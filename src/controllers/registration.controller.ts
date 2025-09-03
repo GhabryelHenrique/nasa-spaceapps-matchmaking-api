@@ -78,4 +78,29 @@ export class RegistrationController {
       throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  @Get('profile')
+  async getProfile(@Query(ValidationPipe) query: CheckEmailDto) {
+    try {
+      const result = await this.registrationService.getUserProfile(query.email);
+
+      if (!result.profileFound) {
+        throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
+      }
+
+      return {
+        email: result.email,
+        profileFound: result.profileFound,
+        profile: result.user,
+      };
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      if (error.message.includes('Invalid email format')) {
+        throw new HttpException('Invalid email format', HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
