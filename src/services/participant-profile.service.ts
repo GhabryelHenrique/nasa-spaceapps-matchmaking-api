@@ -66,13 +66,8 @@ export class ParticipantProfileService {
         expertiseLevel: enrichedProfileData.expertiseLevel || 'beginner',
         workExperience: enrichedProfileData.workExperience || [],
         education: enrichedProfileData.education || 'Not specified',
+        age: enrichedProfileData.age || 25,
         projects: enrichedProfileData.projects || [],
-        availability: enrichedProfileData.availability || {
-          hoursPerWeek: 10,
-          timezone: 'UTC',
-          preferredWorkingHours: '',
-          availableDates: []
-        },
         preferences: enrichedProfileData.preferences || {
           teamSize: 'medium',
           projectType: [],

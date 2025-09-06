@@ -10,6 +10,7 @@ import { InMemoryTeamMatchRepositoryAdapter } from './adapters/in-memory-team-ma
 import { SimpleMatchmakingAlgorithmAdapter } from './adapters/simple-matchmaking-algorithm.adapter';
 import { AuthCodeDocument, AuthCodeSchema } from './schemas/auth-code.schema';
 import { ParticipantProfileDocument, ParticipantProfileSchema } from './schemas/participant-profile.schema';
+import { UserDocument, UserSchema } from './schemas/user.schema';
 import {
   USER_REPOSITORY_TOKEN,
   USER_REPOSITORY_MONGODB_TOKEN,
@@ -26,6 +27,7 @@ import {
     MongooseModule.forFeature([
       { name: AuthCodeDocument.name, schema: AuthCodeSchema },
       { name: ParticipantProfileDocument.name, schema: ParticipantProfileSchema },
+      { name: UserDocument.name, schema: UserSchema },
     ]),
   ],
   providers: [

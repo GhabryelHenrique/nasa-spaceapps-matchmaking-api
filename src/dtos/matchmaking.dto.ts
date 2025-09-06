@@ -10,7 +10,8 @@ import {
   ValidateNested, 
   ArrayMinSize,
   Min,
-  Max
+  Max,
+  IsBoolean
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -32,10 +33,10 @@ export class WorkExperienceDto {
   @Max(50)
   yearsOfExperience: number;
 
+  @IsOptional()
   @IsArray()
-  @ArrayMinSize(1)
   @IsString({ each: true })
-  technologies: string[];
+  technologies?: string[];
 
   @IsOptional()
   @IsString()
@@ -69,33 +70,24 @@ export class ProjectDto {
   url?: string;
 }
 
-export class AvailabilityDto {
-  @IsNumber()
-  @Min(1)
-  @Max(40)
-  hoursPerWeek: number;
-
-  @IsNotEmpty()
-  @IsString()
-  timezone: string;
-
-  @IsNotEmpty()
-  @IsString()
-  preferredWorkingHours: string;
-
-  @IsArray()
-  @IsString({ each: true })
-  availableDates: string[];
-}
 
 export class PreferencesDto {
   @IsEnum(['small', 'medium', 'large', 'any'])
   teamSize: 'small' | 'medium' | 'large' | 'any';
 
+  @IsOptional()
   @IsArray()
-  @ArrayMinSize(1)
   @IsString({ each: true })
-  projectType: string[];
+  projectType?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  projectAreasOfInterest?: string[];
+
+  @IsOptional()
+  @IsBoolean()
+  prefersFemaleOnlyTeam?: boolean;
 
   @IsEnum(['direct', 'collaborative', 'supportive', 'analytical'])
   communicationStyle: 'direct' | 'collaborative' | 'supportive' | 'analytical';
@@ -134,14 +126,33 @@ export class CreateParticipantProfileDto {
   @IsNotEmpty()
   education: string;
 
+  @IsNumber()
+  @Min(16)
+  @Max(100)
+  age: number;
+
+  @IsOptional()
+  @IsEnum(['masculine', 'feminine', 'non-binary', 'prefer-not-to-say'])
+  gender?: 'masculine' | 'feminine' | 'non-binary' | 'prefer-not-to-say';
+
+  @IsOptional()
+  @IsBoolean()
+  preferFemaleTeam?: boolean;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  challengesOfInterest?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  interestAreas?: string[];
+
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ProjectDto)
   projects: ProjectDto[];
-
-  @ValidateNested()
-  @Type(() => AvailabilityDto)
-  availability: AvailabilityDto;
 
   @ValidateNested()
   @Type(() => PreferencesDto)
@@ -208,11 +219,6 @@ export class UpdateParticipantProfileDto {
   @ValidateNested({ each: true })
   @Type(() => ProjectDto)
   projects?: ProjectDto[];
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => AvailabilityDto)
-  availability?: AvailabilityDto;
 
   @IsOptional()
   @ValidateNested()

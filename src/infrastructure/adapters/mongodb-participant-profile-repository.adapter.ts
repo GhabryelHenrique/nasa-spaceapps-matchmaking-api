@@ -301,7 +301,6 @@ export class MongoDBParticipantProfileRepositoryAdapter implements ParticipantPr
       workExperience: profileJson.workExperience,
       education: profileJson.education,
       projects: profileJson.projects,
-      availability: profileJson.availability,
       preferences: profileJson.preferences,
       languages: profileJson.languages,
       githubProfile: profileJson.githubProfile,
@@ -331,6 +330,7 @@ export class MongoDBParticipantProfileRepositoryAdapter implements ParticipantPr
         description: exp.description,
       })),
       education: document.education || 'Not specified',
+      age: document.age || 25,
       projects: document.projects.map(proj => ({
         name: proj.name,
         description: proj.description,
@@ -339,12 +339,6 @@ export class MongoDBParticipantProfileRepositoryAdapter implements ParticipantPr
         duration: proj.duration,
         url: proj.url,
       })),
-      availability: {
-        hoursPerWeek: document.availability.hoursPerWeek,
-        timezone: document.availability.timezone,
-        preferredWorkingHours: document.availability.preferredWorkingHours,
-        availableDates: document.availability.availableDates,
-      },
       preferences: {
         teamSize: document.preferences.teamSize as 'small' | 'medium' | 'large' | 'any',
         projectType: document.preferences.projectType,

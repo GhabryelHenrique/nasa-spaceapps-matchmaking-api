@@ -7,7 +7,9 @@
       "Bash(npm run start:dev:*)",
       "Bash(curl:*)",
       "Bash(npm test)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(echo:*)",
+      "Bash(npm uninstall:*)"
     ],
     "deny": [],
     "ask": []

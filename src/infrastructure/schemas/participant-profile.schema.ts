@@ -16,7 +16,7 @@ export class WorkExperienceSchema {
   yearsOfExperience: number;
 
   @Prop({ type: [String], default: [] })
-  technologies: string[];
+  technologies?: string[];
 
   @Prop()
   description?: string;
@@ -43,20 +43,6 @@ export class ProjectSchema {
   url?: string;
 }
 
-@Schema({ _id: false })
-export class AvailabilitySchema {
-  @Prop({ required: true })
-  hoursPerWeek: number;
-
-  @Prop({ required: true })
-  timezone: string;
-
-  @Prop({ required: true })
-  preferredWorkingHours: string;
-
-  @Prop({ type: [String], default: [] })
-  availableDates: string[];
-}
 
 @Schema({ _id: false })
 export class PreferencesSchema {
@@ -64,7 +50,13 @@ export class PreferencesSchema {
   teamSize: string;
 
   @Prop({ type: [String], default: [] })
-  projectType: string[];
+  projectType?: string[];
+
+  @Prop({ type: [String], default: [] })
+  projectAreasOfInterest?: string[];
+
+  @Prop({ default: false })
+  prefersFemaleOnlyTeam?: boolean;
 
   @Prop({ required: true, enum: ['direct', 'collaborative', 'supportive', 'analytical'] })
   communicationStyle: string;
@@ -123,11 +115,24 @@ export class ParticipantProfileDocument extends Document {
   @Prop({ required: true })
   education: string;
 
+  @Prop({ required: true, min: 16, max: 100 })
+  age: number;
+
+  @Prop({ enum: ['masculine', 'feminine', 'non-binary', 'prefer-not-to-say'] })
+  gender?: string;
+
+  @Prop({ default: false })
+  preferFemaleTeam?: boolean;
+
+  @Prop({ type: [String], default: [] })
+  challengesOfInterest?: string[];
+
+  @Prop({ type: [String], default: [] })
+  interestAreas?: string[];
+
   @Prop({ type: [ProjectSchema], default: [] })
   projects: ProjectSchema[];
 
-  @Prop({ type: AvailabilitySchema, required: true })
-  availability: AvailabilitySchema;
 
   @Prop({ type: PreferencesSchema, required: true })
   preferences: PreferencesSchema;

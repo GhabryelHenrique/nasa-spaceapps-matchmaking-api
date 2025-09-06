@@ -5,6 +5,8 @@ import { EmailService } from './email.service';
 import { RegistrationService } from './registration.service';
 import { ParticipantProfileService } from './participant-profile.service';
 import { MatchmakingService } from './matchmaking.service';
+import { NasaApiService } from './nasa-api.service';
+import { NasaSyncService } from './nasa-sync.service';
 import { InfrastructureModule } from '../infrastructure/infrastructure.module';
 
 @Module({
@@ -16,6 +18,8 @@ import { InfrastructureModule } from '../infrastructure/infrastructure.module';
     RegistrationService,
     ParticipantProfileService,
     MatchmakingService,
+    NasaApiService,
+    NasaSyncService,
   ],
   exports: [
     UserService,
@@ -24,6 +28,8 @@ import { InfrastructureModule } from '../infrastructure/infrastructure.module';
     RegistrationService,
     ParticipantProfileService,
     MatchmakingService,
+    NasaApiService,
+    NasaSyncService,
   ],
 })
 export class ServicesModule {}

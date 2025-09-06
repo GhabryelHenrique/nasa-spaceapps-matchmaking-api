@@ -1,0 +1,715 @@
+[
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd20" },
+    "email": "helena.rafaela@iftm.edu.br",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 45,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "8-18",
+      "availableDates": ["2025-10-04", "2025-10-05", "2025-10-06"]
+    },
+    "bio": "Mestranda em Inteligência Artificial aplicada a dados espaciais. Pesquisadora com foco em deep learning para análise de imagens satelitais e detecção de mudanças climáticas.",
+    "challengesInterests": ["climate-change", "satellite-imagery", "deep-learning"],
+    "createdAt": { "$date": "2025-08-25T10:15:30.123Z" },
+    "education": "Mestrando",
+    "expertiseLevel": "expert",
+    "fullName": "Helena Rafaela Fava Monteiro Guimarães",
+    "isComplete": true,
+    "languages": ["Portuguese", "English", "French"],
+    "participationGoals": ["research", "innovation", "networking", "winning"],
+    "preferences": {
+      "teamSize": "large",
+      "projectType": [
+        "landsat-reflectance-data-on-the-fly-and-at-your-fingertips",
+        "leveraging-earth-observation-data-for-informed-agricultural-decision-making",
+        "seismic-detection-across-the-solar-system"
+      ],
+      "projectAreasOfInterest": ["ai-ml", "research", "data-science", "climate"],
+      "prefersFemaleOnlyTeam": false,
+      "communicationStyle": "analytical",
+      "workStyle": "leader",
+      "interests": ["climate", "ai", "research", "space"]
+    },
+    "projects": [
+      {
+        "name": "ClimateAI Monitor",
+        "description": "Sistema de IA para monitoramento de mudanças climáticas usando dados Landsat",
+        "role": "Lead Researcher",
+        "technologies": ["PyTorch", "TensorFlow", "Google Earth Engine"]
+      },
+      {
+        "name": "DeepSat Analysis",
+        "description": "Framework de deep learning para análise automatizada de imagens satelitais",
+        "role": "ML Engineer",
+        "technologies": ["Python", "CUDA", "OpenCV"]
+      }
+    ],
+    "skills": ["Python", "PyTorch", "TensorFlow", "R", "MATLAB", "Google Earth Engine", "CUDA"],
+    "updatedAt": { "$date": "2025-09-05T14:20:45.678Z" },
+    "workExperience": [
+      {
+        "company": "Instituto Federal do Triângulo Mineiro",
+        "position": "Research Assistant",
+        "sector": "Education & Research",
+        "yearsOfExperience": 3,
+        "technologies": ["ML", "Python", "Remote Sensing"],
+        "description": "Pesquisa em aplicações de IA para análise de dados geoespaciais"
+      }
+    ]
+  },
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd21" },
+    "email": "caio.henrik@gmail.com",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 20,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "14-18",
+      "availableDates": ["2025-10-05", "2025-10-06"]
+    },
+    "bio": "Estudante do ensino médio apaixonado por astronomia e programação. Participante de olimpíadas de astronomia e robótica.",
+    "challengesInterests": ["astronomy", "robotics", "gaming"],
+    "createdAt": { "$date": "2025-09-01T16:30:22.456Z" },
+    "education": "Ensino Médio",
+    "expertiseLevel": "beginner",
+    "fullName": "Caio Henrik Silva Santos",
+    "isComplete": true,
+    "languages": ["Portuguese", "English"],
+    "participationGoals": ["learning", "portfolio", "fun"],
+    "preferences": {
+      "teamSize": "medium",
+      "projectType": [
+        "meteor-madness",
+        "symphony-of-the-stars-harmonizing-the-james-webb-space"
+      ],
+      "projectAreasOfInterest": ["game-development", "web-development", "astronomy"],
+      "prefersFemaleOnlyTeam": false,
+      "communicationStyle": "collaborative",
+      "workStyle": "contributor",
+      "interests": ["gaming", "astronomy", "physics"]
+    },
+    "projects": [],
+    "skills": ["Python", "Scratch", "HTML", "CSS", "JavaScript"],
+    "updatedAt": { "$date": "2025-09-04T11:15:30.789Z" },
+    "workExperience": []
+  },
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd22" },
+    "email": "renato.honorio@ufu.br",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 30,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "9-17",
+      "availableDates": ["2025-10-04", "2025-10-05", "2025-10-06"]
+    },
+    "bio": "Professor universitário e desenvolvedor full-stack. Especialista em sistemas distribuídos e computação em nuvem para processamento de big data espacial.",
+    "challengesInterests": ["distributed-systems", "cloud-computing", "big-data"],
+    "createdAt": { "$date": "2025-08-28T09:45:15.234Z" },
+    "education": "Doutorado Completo",
+    "expertiseLevel": "expert",
+    "fullName": "Renato Honorio Ferreira",
+    "isComplete": true,
+    "languages": ["Portuguese", "English", "Spanish", "Italian"],
+    "participationGoals": ["mentoring", "innovation", "research"],
+    "preferences": {
+      "teamSize": "large",
+      "projectType": [
+        "seismic-detection-across-the-solar-system",
+        "landsat-reflectance-data-on-the-fly-and-at-your-fingertips"
+      ],
+      "projectAreasOfInterest": ["cloud", "backend", "devops", "big-data"],
+      "prefersFemaleOnlyTeam": false,
+      "communicationStyle": "mentoring",
+      "workStyle": "advisor",
+      "interests": ["technology", "education", "space"]
+    },
+    "projects": [
+      {
+        "name": "SpaceData Cloud Platform",
+        "description": "Plataforma cloud para processamento distribuído de dados espaciais",
+        "role": "Technical Architect",
+        "technologies": ["Kubernetes", "Apache Spark", "AWS"]
+      }
+    ],
+    "skills": ["Java", "Python", "Kubernetes", "Apache Spark", "AWS", "Terraform", "Scala"],
+    "updatedAt": { "$date": "2025-09-05T13:25:40.567Z" },
+    "workExperience": [
+      {
+        "company": "Universidade Federal de Uberlândia",
+        "position": "Professor & Researcher",
+        "sector": "Education",
+        "yearsOfExperience": 12,
+        "technologies": ["Cloud Computing", "Big Data", "Distributed Systems"],
+        "description": "Ensino e pesquisa em sistemas distribuídos e computação em nuvem"
+      }
+    ]
+  },
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd23" },
+    "email": "taniela.freitas@estudante.ufu.br",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 35,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "10-18",
+      "availableDates": ["2025-10-04", "2025-10-05", "2025-10-06"]
+    },
+    "bio": "Graduanda em Engenharia Biomédica com interesse em aplicações espaciais para saúde. Experiência em processamento de sinais biológicos e IoT médico.",
+    "challengesInterests": ["health", "iot", "space-medicine"],
+    "createdAt": { "$date": "2025-09-02T14:20:33.890Z" },
+    "education": "Graduando Ensino Superior",
+    "expertiseLevel": "intermediate",
+    "fullName": "Taniela Freitas Costa",
+    "isComplete": true,
+    "languages": ["Portuguese", "English"],
+    "participationGoals": ["innovation", "learning", "social-impact"],
+    "preferences": {
+      "teamSize": "medium",
+      "projectType": [
+        "ocean-gardens",
+        "leveraging-earth-observation-data-for-informed-agricultural-decision-making"
+      ],
+      "projectAreasOfInterest": ["iot", "health-tech", "data-science"],
+      "prefersFemaleOnlyTeam": true,
+      "communicationStyle": "supportive",
+      "workStyle": "collaborator",
+      "interests": ["health", "biotechnology", "sustainability"]
+    },
+    "projects": [
+      {
+        "name": "BioSignal Space Monitor",
+        "description": "Monitor de sinais vitais para astronautas usando IoT",
+        "role": "Hardware Developer",
+        "technologies": ["Arduino", "Python", "Signal Processing"]
+      }
+    ],
+    "skills": ["Python", "MATLAB", "Arduino", "Signal Processing", "Machine Learning"],
+    "updatedAt": { "$date": "2025-09-05T09:30:25.123Z" },
+    "workExperience": [
+      {
+        "company": "Laboratório de Bioengenharia UFU",
+        "position": "Research Intern",
+        "sector": "Biomedical Research",
+        "yearsOfExperience": 2,
+        "technologies": ["MATLAB", "Python", "IoT"],
+        "description": "Desenvolvimento de dispositivos médicos IoT"
+      }
+    ]
+  },
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd24" },
+    "email": "diego.francisco@empresa.com",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 25,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "18-23",
+      "availableDates": ["2025-10-04", "2025-10-05"]
+    },
+    "bio": "Arquiteto de Software com 10 anos de experiência. Especialista em microsserviços e arquiteturas serverless para aplicações de alta performance.",
+    "challengesInterests": ["architecture", "performance", "scalability"],
+    "createdAt": { "$date": "2025-08-30T11:40:18.456Z" },
+    "education": "Ensino Superior Completo",
+    "expertiseLevel": "expert",
+    "fullName": "Diego Francisco Oliveira",
+    "isComplete": true,
+    "languages": ["Portuguese", "English"],
+    "participationGoals": ["networking", "innovation", "winning"],
+    "preferences": {
+      "teamSize": "large",
+      "projectType": [
+        "seismic-detection-across-the-solar-system",
+        "landsat-reflectance-data-on-the-fly-and-at-your-fingertips"
+      ],
+      "projectAreasOfInterest": ["backend", "cloud", "architecture"],
+      "prefersFemaleOnlyTeam": false,
+      "communicationStyle": "direct",
+      "workStyle": "leader",
+      "interests": ["technology", "space", "innovation"]
+    },
+    "projects": [
+      {
+        "name": "Real-time Space Data Pipeline",
+        "description": "Pipeline serverless para processamento de dados espaciais em tempo real",
+        "role": "Software Architect",
+        "technologies": ["AWS Lambda", "Kinesis", "DynamoDB"]
+      }
+    ],
+    "skills": ["Node.js", "Go", "AWS", "Serverless", "Microservices", "GraphQL"],
+    "updatedAt": { "$date": "2025-09-05T15:45:30.789Z" },
+    "workExperience": [
+      {
+        "company": "Tech Corporation",
+        "position": "Senior Software Architect",
+        "sector": "Technology",
+        "yearsOfExperience": 10,
+        "technologies": ["Microservices", "AWS", "Serverless"],
+        "description": "Arquitetura de sistemas distribuídos de alta performance"
+      }
+    ]
+  },
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd25" },
+    "email": "melissa.nobre2014@gmail.com",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 40,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "8-16",
+      "availableDates": ["2025-10-04", "2025-10-05", "2025-10-06"]
+    },
+    "bio": "Graduanda em Ciência da Computação, 19 anos. Apaixonada por desenvolvimento mobile e realidade aumentada aplicada à educação espacial.",
+    "challengesInterests": ["mobile", "ar-vr", "education"],
+    "createdAt": { "$date": "2025-07-22T03:00:47.274Z" },
+    "education": "Graduando Ensino Superior",
+    "expertiseLevel": "beginner",
+    "fullName": "Melissa Nobre Silva",
+    "isComplete": true,
+    "languages": ["Portuguese", "English"],
+    "participationGoals": ["learning", "portfolio", "networking"],
+    "preferences": {
+      "teamSize": "small",
+      "projectType": [
+        "create-a-poetic-web-app",
+        "symphony-of-the-stars-harmonizing-the-james-webb-space"
+      ],
+      "projectAreasOfInterest": ["mobile", "ar-vr", "frontend"],
+      "prefersFemaleOnlyTeam": false,
+      "communicationStyle": "collaborative",
+      "workStyle": "contributor",
+      "interests": ["education", "mobile", "design"]
+    },
+    "projects": [],
+    "skills": ["React Native", "Swift", "Kotlin", "Unity"],
+    "updatedAt": { "$date": "2025-09-04T08:20:15.234Z" },
+    "workExperience": []
+  },
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd26" },
+    "email": "vitor.alves@outlook.com",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 30,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "9-17",
+      "availableDates": ["2025-10-04", "2025-10-05", "2025-10-06"]
+    },
+    "bio": "Engenheiro de Dados com especialização em pipelines de dados geoespaciais. Experiência com processamento de grandes volumes de dados satelitais.",
+    "challengesInterests": ["big-data", "geospatial", "data-engineering"],
+    "createdAt": { "$date": "2025-08-27T10:15:40.567Z" },
+    "education": "Ensino Superior Completo",
+    "expertiseLevel": "intermediate",
+    "fullName": "Vitor Alves Mendes",
+    "isComplete": true,
+    "languages": ["Portuguese", "English"],
+    "participationGoals": ["innovation", "networking", "learning"],
+    "preferences": {
+      "teamSize": "medium",
+      "projectType": [
+        "landsat-reflectance-data-on-the-fly-and-at-your-fingertips",
+        "leveraging-earth-observation-data-for-informed-agricultural-decision-making"
+      ],
+      "projectAreasOfInterest": ["data-engineering", "gis", "cloud"],
+      "prefersFemaleOnlyTeam": false,
+      "communicationStyle": "direct",
+      "workStyle": "independent",
+      "interests": ["data", "maps", "technology"]
+    },
+    "projects": [
+      {
+        "name": "GeoData Pipeline",
+        "description": "Pipeline ETL para dados geoespaciais",
+        "role": "Data Engineer",
+        "technologies": ["Apache Airflow", "PostGIS", "Python"]
+      }
+    ],
+    "skills": ["Python", "Apache Airflow", "PostGIS", "Apache Kafka", "Spark"],
+    "updatedAt": { "$date": "2025-09-05T11:30:22.890Z" },
+    "workExperience": [
+      {
+        "company": "GeoTech Solutions",
+        "position": "Data Engineer",
+        "sector": "Geospatial Technology",
+        "yearsOfExperience": 5,
+        "technologies": ["ETL", "GIS", "Big Data"],
+        "description": "Desenvolvimento de pipelines para dados geoespaciais"
+      }
+    ]
+  },
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd27" },
+    "email": "marcelo.henrique@iftm.edu.br",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 20,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "19-23",
+      "availableDates": ["2025-10-05", "2025-10-06"]
+    },
+    "bio": "Graduando em Análise e Desenvolvimento de Sistemas. Entusiasta de blockchain e suas aplicações em sistemas espaciais descentralizados.",
+    "challengesInterests": ["blockchain", "decentralized", "security"],
+    "createdAt": { "$date": "2025-09-03T13:25:45.123Z" },
+    "education": "Graduando Ensino Superior",
+    "expertiseLevel": "beginner",
+    "fullName": "Marcelo Henrique Rodrigues",
+    "isComplete": false,
+    "languages": ["Portuguese"],
+    "participationGoals": ["learning", "innovation"],
+    "preferences": {
+      "teamSize": "small",
+      "projectType": [
+        "seismic-detection-across-the-solar-system",
+        "meteor-madness"
+      ],
+      "projectAreasOfInterest": ["blockchain", "backend", "security"],
+      "prefersFemaleOnlyTeam": false,
+      "communicationStyle": "collaborative",
+      "workStyle": "contributor",
+      "interests": ["blockchain", "cryptocurrency", "innovation"]
+    },
+    "projects": [],
+    "skills": ["Solidity", "JavaScript", "Node.js", "Web3.js"],
+    "updatedAt": { "$date": "2025-09-05T16:40:18.456Z" },
+    "workExperience": []
+  },
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd28" },
+    "email": "gabriele.pereira@yahoo.com",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 35,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "10-18",
+      "availableDates": ["2025-10-04", "2025-10-05", "2025-10-06"]
+    },
+    "bio": "Graduanda em Engenharia Ambiental com foco em sensoriamento remoto para monitoramento de recursos hídricos e mudanças climáticas.",
+    "challengesInterests": ["water", "climate", "remote-sensing"],
+    "createdAt": { "$date": "2025-08-29T08:30:25.789Z" },
+    "education": "Graduando Ensino Superior",
+    "expertiseLevel": "intermediate",
+    "fullName": "Gabriele Pereira Santos",
+    "isComplete": true,
+    "languages": ["Portuguese", "English", "Spanish"],
+    "participationGoals": ["social-impact", "learning", "research"],
+    "preferences": {
+      "teamSize": "medium",
+      "projectType": [
+        "ocean-gardens",
+        "leveraging-earth-observation-data-for-informed-agricultural-decision-making"
+      ],
+      "projectAreasOfInterest": ["environmental", "gis", "data-science"],
+      "prefersFemaleOnlyTeam": true,
+      "communicationStyle": "supportive",
+      "workStyle": "collaborator",
+      "interests": ["environment", "water", "sustainability"]
+    },
+    "projects": [
+      {
+        "name": "WaterWatch",
+        "description": "Sistema de monitoramento de recursos hídricos via satélite",
+        "role": "Environmental Analyst",
+        "technologies": ["QGIS", "Python", "Google Earth Engine"]
+      }
+    ],
+    "skills": ["QGIS", "ArcGIS", "Python", "R", "Google Earth Engine"],
+    "updatedAt": { "$date": "2025-09-05T12:15:35.234Z" },
+    "workExperience": [
+      {
+        "company": "Instituto de Pesquisas Ambientais",
+        "position": "Research Intern",
+        "sector": "Environmental Research",
+        "yearsOfExperience": 1,
+        "technologies": ["GIS", "Remote Sensing"],
+        "description": "Análise de dados ambientais usando sensoriamento remoto"
+      }
+    ]
+  },
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd29" },
+    "email": "joao.alexandre@gmail.com",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 25,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "14-20",
+      "availableDates": ["2025-10-04", "2025-10-05"]
+    },
+    "bio": "Graduando em Física Computacional. Experiência em simulações numéricas e modelagem de fenômenos astrofísicos.",
+    "challengesInterests": ["physics", "simulations", "astrophysics"],
+    "createdAt": { "$date": "2025-09-01T09:45:30.567Z" },
+    "education": "Graduando Ensino Superior",
+    "expertiseLevel": "intermediate",
+    "fullName": "João Alexandre Albuquerque de Sá",
+    "isComplete": true,
+    "languages": ["Portuguese", "English"],
+    "participationGoals": ["research", "learning", "innovation"],
+    "preferences": {
+      "teamSize": "medium",
+      "projectType": [
+        "symphony-of-the-stars-harmonizing-the-james-webb-space",
+        "seismic-detection-across-the-solar-system"
+      ],
+      "projectAreasOfInterest": ["scientific-computing", "physics", "mathematics"],
+      "prefersFemaleOnlyTeam": false,
+      "communicationStyle": "analytical",
+      "workStyle": "independent",
+      "interests": ["physics", "astronomy", "mathematics"]
+    },
+    "projects": [],
+    "skills": ["Python", "C++", "Fortran", "NumPy", "SciPy", "Mathematica"],
+    "updatedAt": { "$date": "2025-09-05T14:25:40.890Z" },
+    "workExperience": []
+  },
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd30" },
+    "email": "ana.clara.mattos@protonmail.com",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 30,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "8-14",
+      "availableDates": ["2025-10-04", "2025-10-05", "2025-10-06"]
+    },
+    "bio": "Graduanda em Medicina com interesse em telemedicina espacial e efeitos da microgravidade na saúde humana. Participante de projetos de pesquisa em medicina aeroespacial.",
+    "challengesInterests": ["space-medicine", "health", "telemedicine"],
+    "createdAt": { "$date": "2025-08-31T11:20:18.123Z" },
+    "education": "Graduando Ensino Superior",
+    "expertiseLevel": "beginner",
+    "fullName": "Ana Clara Mattos Martins dos Santos Machado",
+    "isComplete": true,
+    "languages": ["Portuguese", "English", "Spanish"],
+    "participationGoals": ["learning", "research", "social-impact"],
+    "preferences": {
+      "teamSize": "large",
+      "projectType": [
+        "ocean-gardens",
+        "leveraging-earth-observation-data-for-informed-agricultural-decision-making"
+      ],
+      "projectAreasOfInterest": ["health-tech", "research", "biology"],
+      "prefersFemaleOnlyTeam": false,
+      "communicationStyle": "supportive",
+      "workStyle": "collaborator",
+      "interests": ["health", "biology", "space-medicine"]
+    },
+    "projects": [],
+    "skills": ["Python", "R", "Statistical Analysis", "Medical Research"],
+    "updatedAt": { "$date": "2025-09-05T10:40:25.456Z" },
+    "workExperience": []
+  },
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd31" },
+    "email": "pedro.paulo.pardo@empresa.com",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 20,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "18-22",
+      "availableDates": ["2025-10-05", "2025-10-06"]
+    },
+    "bio": "Engenheiro Mecânico com MBA em Gestão de Projetos. Experiência em projetos aeroespaciais e desenvolvimento de sistemas embarcados para satélites.",
+    "challengesInterests": ["aerospace", "embedded-systems", "project-management"],
+    "createdAt": { "$date": "2025-09-02T15:35:40.789Z" },
+    "education": "Pós-graduação",
+    "expertiseLevel": "expert",
+    "fullName": "Pedro Paulo Pardo den Almeida",
+    "isComplete": true,
+    "languages": ["Portuguese", "English", "German"],
+    "participationGoals": ["innovation", "networking", "mentoring"],
+    "preferences": {
+      "teamSize": "large",
+      "projectType": [
+        "seismic-detection-across-the-solar-system",
+        "meteor-madness"
+      ],
+      "projectAreasOfInterest": ["hardware", "embedded", "aerospace"],
+      "prefersFemaleOnlyTeam": false,
+      "communicationStyle": "mentoring",
+      "workStyle": "advisor",
+      "interests": ["aerospace", "engineering", "innovation"]
+    },
+    "projects": [
+      {
+        "name": "CubeSat Control System",
+        "description": "Sistema de controle embarcado para CubeSat",
+        "role": "Project Manager",
+        "technologies": ["C", "RTOS", "ARM"]
+      }
+    ],
+    "skills": ["C", "C++", "RTOS", "ARM", "Project Management", "Systems Engineering"],
+    "updatedAt": { "$date": "2025-09-05T17:50:30.234Z" },
+    "workExperience": [
+      {
+        "company": "AeroSpace Brasil",
+        "position": "Senior Systems Engineer",
+        "sector": "Aerospace",
+        "yearsOfExperience": 8,
+        "technologies": ["Embedded Systems", "C/C++", "RTOS"],
+        "description": "Desenvolvimento de sistemas embarcados para aplicações aeroespaciais"
+      }
+    ]
+  },
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd32" },
+    "email": "sammy.prates@estudante.ufu.br",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 40,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "9-18",
+      "availableDates": ["2025-10-04", "2025-10-05", "2025-10-06"]
+    },
+    "bio": "Graduanda em Design Digital com especialização em visualização de dados científicos. Criadora de experiências interativas para divulgação científica.",
+    "challengesInterests": ["data-visualization", "ux-ui", "science-communication"],
+    "createdAt": { "$date": "2025-08-26T14:20:15.567Z" },
+    "education": "Graduando Ensino Superior",
+    "expertiseLevel": "intermediate",
+    "fullName": "Sammy Prates Oliveira",
+    "isComplete": true,
+    "languages": ["Portuguese", "English"],
+    "participationGoals": ["portfolio", "learning", "networking"],
+    "preferences": {
+      "teamSize": "medium",
+      "projectType": [
+        "create-a-poetic-web-app",
+        "symphony-of-the-stars-harmonizing-the-james-webb-space"
+      ],
+      "projectAreasOfInterest": ["design", "frontend", "data-visualization"],
+      "prefersFemaleOnlyTeam": false,
+      "communicationStyle": "collaborative",
+      "workStyle": "collaborator",
+      "interests": ["arts", "design", "science-communication"]
+    },
+    "projects": [
+      {
+        "name": "Space Data Art",
+        "description": "Instalação interativa com dados do James Webb",
+        "role": "Creative Director",
+        "technologies": ["Processing", "p5.js", "TouchDesigner"]
+      }
+    ],
+    "skills": ["Figma", "Adobe Creative Suite", "p5.js", "Three.js", "D3.js"],
+    "updatedAt": { "$date": "2025-09-05T13:15:45.890Z" },
+    "workExperience": [
+      {
+        "company": "Creative Studio UFU",
+        "position": "UX/UI Designer",
+        "sector": "Design",
+        "yearsOfExperience": 2,
+        "technologies": ["Figma", "Adobe XD", "JavaScript"],
+        "description": "Design de interfaces para aplicações científicas"
+      }
+    ]
+  },
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd33" },
+    "email": "lucas.lara@outlook.com",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 35,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "10-18",
+      "availableDates": ["2025-10-04", "2025-10-05", "2025-10-06"]
+    },
+    "bio": "Graduando em Engenharia de Software. Desenvolvedor full-stack com experiência em aplicações web escaláveis e APIs RESTful para sistemas de dados espaciais.",
+    "challengesInterests": ["web-development", "apis", "scalability"],
+    "createdAt": { "$date": "2025-08-24T09:30:22.123Z" },
+    "education": "Graduando Ensino Superior",
+    "expertiseLevel": "intermediate",
+    "fullName": "Lucas Lara Carvalho",
+    "isComplete": true,
+    "languages": ["Portuguese", "English"],
+    "participationGoals": ["portfolio", "networking", "winning"],
+    "preferences": {
+      "teamSize": "medium",
+      "projectType": [
+        "landsat-reflectance-data-on-the-fly-and-at-your-fingertips",
+        "nasa-farm-navigators-using-nasa-data-exploration-in-agriculture"
+      ],
+      "projectAreasOfInterest": ["fullstack", "backend", "apis"],
+      "prefersFemaleOnlyTeam": false,
+      "communicationStyle": "direct",
+      "workStyle": "independent",
+      "interests": ["technology", "startups", "innovation"]
+    },
+    "projects": [
+      {
+        "name": "SpaceAPI Gateway",
+        "description": "API Gateway para integração de múltiplas fontes de dados espaciais",
+        "role": "Full Stack Developer",
+        "technologies": ["Node.js", "React", "MongoDB", "Redis"]
+      }
+    ],
+    "skills": ["JavaScript", "TypeScript", "React", "Node.js", "MongoDB", "PostgreSQL", "Docker"],
+    "updatedAt": { "$date": "2025-09-05T15:40:50.456Z" },
+    "workExperience": [
+      {
+        "company": "Startup Tech Hub",
+        "position": "Junior Full Stack Developer",
+        "sector": "Technology",
+        "yearsOfExperience": 2,
+        "technologies": ["React", "Node.js", "AWS"],
+        "description": "Desenvolvimento de aplicações web e APIs RESTful"
+      }
+    ]
+  },
+  {
+    "_id": { "$oid": "68b82fb633c7b40d346ccd34" },
+    "email": "italo.tillmann@gmail.com",
+    "__v": 0,
+    "availability": {
+      "hoursPerWeek": 30,
+      "timezone": "America/Sao_Paulo",
+      "preferredWorkingHours": "8-16",
+      "availableDates": ["2025-10-04", "2025-10-05", "2025-10-06"]
+    },
+    "bio": "Desenvolvedor Sênior especializado em inteligência artificial e computer vision. Experiência em projetos de reconhecimento de padrões em imagens satelitais para detecção de desmatamento.",
+    "challengesInterests": ["computer-vision", "ai", "environmental-monitoring"],
+    "createdAt": { "$date": "2025-08-23T10:45:30.789Z" },
+    "education": "Ensino Superior Completo",
+    "expertiseLevel": "expert",
+    "fullName": "Ítalo Nunes Tillmann de Abreu",
+    "isComplete": true,
+    "languages": ["Portuguese", "English", "French"],
+    "participationGoals": ["innovation", "social-impact", "winning"],
+    "preferences": {
+      "teamSize": "large",
+      "projectType": [
+        "landsat-reflectance-data-on-the-fly-and-at-your-fingertips",
+        "leveraging-earth-observation-data-for-informed-agricultural-decision-making"
+      ],
+      "projectAreasOfInterest": ["ai-ml", "computer-vision", "environmental"],
+      "prefersFemaleOnlyTeam": false,
+      "communicationStyle": "analytical",
+      "workStyle": "leader",
+      "interests": ["ai", "environment", "technology"]
+    },
+    "projects": [
+      {
+        "name": "ForestGuard AI",
+        "description": "Sistema de IA para detecção de desmatamento em tempo real",
+        "role": "Tech Lead",
+        "technologies": ["Python", "TensorFlow", "OpenCV", "GDAL"]
+      },
+      {
+        "name": "SatVision Pro",
+        "description": "Plataforma de análise automatizada de imagens satelitais",
+        "role": "AI Engineer",
+        "technologies": ["PyTorch", "FastAPI", "Docker"]
+      }
+    ],
+    "skills": ["Python", "TensorFlow", "PyTorch", "OpenCV", "GDAL", "FastAPI", "Computer Vision"],
+    "updatedAt": { "$date": "2025-09-05T16:25:35.234Z" },
+    "workExperience": [
+      {
+        "company": "Environmental Tech Solutions",
+        "position": "Senior AI Engineer",
+        "sector": "Environmental Technology",
+        "yearsOfExperience": 7,
+        "technologies": ["AI/ML", "Computer Vision", "Python"],
+        "description": "Desenvolvimento de soluções de IA para monitoramento ambiental"
+      }
+    ]
+  }
+]

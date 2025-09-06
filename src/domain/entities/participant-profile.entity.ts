@@ -5,7 +5,7 @@ export interface WorkExperience {
   position: string;
   sector: string;
   yearsOfExperience: number;
-  technologies: string[];
+  technologies?: string[];
   description?: string;
 }
 
@@ -18,16 +18,12 @@ export interface Project {
   url?: string;
 }
 
-export interface Availability {
-  hoursPerWeek: number;
-  timezone: string;
-  preferredWorkingHours: string;
-  availableDates: string[];
-}
 
 export interface Preferences {
   teamSize: 'small' | 'medium' | 'large' | 'any';
-  projectType: string[];
+  projectType?: string[];
+  projectAreasOfInterest?: string[];
+  prefersFemaleOnlyTeam?: boolean;
   communicationStyle: 'direct' | 'collaborative' | 'supportive' | 'analytical';
   workStyle: 'leader' | 'contributor' | 'specialist' | 'facilitator';
   interests: string[];
@@ -53,8 +49,8 @@ export class ParticipantProfile {
     public readonly expertiseLevel: 'beginner' | 'intermediate' | 'advanced' | 'expert',
     public readonly workExperience: WorkExperience[],
     public readonly education: string,
+    public readonly age: number,
     public readonly projects: Project[],
-    public readonly availability: Availability,
     public readonly preferences: Preferences,
     public readonly languages: string[],
     public readonly githubProfile?: string,
@@ -63,6 +59,10 @@ export class ParticipantProfile {
     public readonly bio?: string,
     public readonly participationGoals?: string[],
     public readonly challengesInterests?: string[],
+    public readonly gender?: 'masculine' | 'feminine' | 'non-binary' | 'prefer-not-to-say',
+    public readonly preferFemaleTeam?: boolean,
+    public readonly challengesOfInterest?: string[],
+    public readonly interestAreas?: string[],
     public readonly googleSheetsData?: GoogleSheetsData,
     public readonly createdAt: Date = new Date(),
     public readonly updatedAt: Date = new Date(),
@@ -75,8 +75,8 @@ export class ParticipantProfile {
     expertiseLevel: 'beginner' | 'intermediate' | 'advanced' | 'expert';
     workExperience: WorkExperience[];
     education: string;
+    age: number;
     projects: Project[];
-    availability: Availability;
     preferences: Preferences;
     languages: string[];
     githubProfile?: string;
@@ -85,6 +85,10 @@ export class ParticipantProfile {
     bio?: string;
     participationGoals?: string[];
     challengesInterests?: string[];
+    gender?: 'masculine' | 'feminine' | 'non-binary' | 'prefer-not-to-say';
+    preferFemaleTeam?: boolean;
+    challengesOfInterest?: string[];
+    interestAreas?: string[];
     googleSheetsData?: GoogleSheetsData;
   }): ParticipantProfile {
     return new ParticipantProfile(
@@ -95,8 +99,8 @@ export class ParticipantProfile {
       data.expertiseLevel,
       data.workExperience,
       data.education,
+      data.age,
       data.projects,
-      data.availability,
       data.preferences,
       data.languages,
       data.githubProfile,
@@ -105,6 +109,10 @@ export class ParticipantProfile {
       data.bio,
       data.participationGoals,
       data.challengesInterests,
+      data.gender,
+      data.preferFemaleTeam,
+      data.challengesOfInterest,
+      data.interestAreas,
       data.googleSheetsData,
     );
   }
@@ -118,8 +126,8 @@ export class ParticipantProfile {
       data.expertiseLevel ?? this.expertiseLevel,
       data.workExperience ?? this.workExperience,
       data.education ?? this.education,
+      data.age ?? this.age,
       data.projects ?? this.projects,
-      data.availability ?? this.availability,
       data.preferences ?? this.preferences,
       data.languages ?? this.languages,
       data.githubProfile ?? this.githubProfile,
@@ -128,6 +136,10 @@ export class ParticipantProfile {
       data.bio ?? this.bio,
       data.participationGoals ?? this.participationGoals,
       data.challengesInterests ?? this.challengesInterests,
+      data.gender ?? this.gender,
+      data.preferFemaleTeam ?? this.preferFemaleTeam,
+      data.challengesOfInterest ?? this.challengesOfInterest,
+      data.interestAreas ?? this.interestAreas,
       data.googleSheetsData ?? this.googleSheetsData,
       this.createdAt,
       new Date(),
@@ -148,9 +160,11 @@ export class ParticipantProfile {
     
     // From work experience
     this.workExperience.forEach(exp => {
-      exp.technologies.forEach(tech => {
-        techMap[tech.toLowerCase()] = (techMap[tech.toLowerCase()] || 0) + exp.yearsOfExperience;
-      });
+      if (exp.technologies) {
+        exp.technologies.forEach(tech => {
+          techMap[tech.toLowerCase()] = (techMap[tech.toLowerCase()] || 0) + exp.yearsOfExperience;
+        });
+      }
     });
     
     // From projects
@@ -199,7 +213,6 @@ export class ParticipantProfile {
       workExperience: this.workExperience,
       education: this.education,
       projects: this.projects,
-      availability: this.availability,
       preferences: this.preferences,
       languages: this.languages,
       githubProfile: this.githubProfile,
@@ -208,6 +221,10 @@ export class ParticipantProfile {
       bio: this.bio,
       participationGoals: this.participationGoals,
       challengesInterests: this.challengesInterests,
+      gender: this.gender,
+      preferFemaleTeam: this.preferFemaleTeam,
+      challengesOfInterest: this.challengesOfInterest,
+      interestAreas: this.interestAreas,
       googleSheetsData: this.googleSheetsData,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString(),

@@ -14,9 +14,19 @@ export interface MatchmakingAlgorithmPort {
     candidates: ParticipantProfile[]
   ): Promise<number>;
   
+  calculateIndividualMatch(
+    profile1: ParticipantProfile, 
+    profile2: ParticipantProfile
+  ): Promise<any>;
+  
   generateTeamRecommendations(
     profiles: ParticipantProfile[], 
     teamSize?: number
+  ): Promise<TeamMatch[]>;
+  
+  findDiverseTeams(
+    allProfiles: ParticipantProfile[],
+    options?: MatchmakingOptions
   ): Promise<TeamMatch[]>;
 }
 

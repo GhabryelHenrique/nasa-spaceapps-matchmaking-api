@@ -11,6 +11,7 @@ export class NodemailerEmailServiceAdapter implements EmailServicePort {
   private transporter;
 
   constructor(@Inject(LOGGER_TOKEN) private readonly logger: LoggerPort) {
+    console.log(process.env.SMTP_PASS)
     this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: parseInt(process.env.SMTP_PORT || '587'),

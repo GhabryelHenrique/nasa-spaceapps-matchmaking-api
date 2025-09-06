@@ -13,18 +13,23 @@ import {
 } from '@nestjs/common';
 import { ParticipantProfileService } from '../services/participant-profile.service';
 import { MatchmakingService } from '../services/matchmaking.service';
+import { NasaApiService } from '../services/nasa-api.service';
+import { NasaSyncService } from '../services/nasa-sync.service';
 import {
   CreateParticipantProfileDto,
   UpdateParticipantProfileDto,
   FindMatchesDto,
 } from '../dtos/matchmaking.dto';
 import { CompleteProfileDto } from '../dtos/profile-completion.dto';
+import { logger } from '../infrastructure/config/logger.config';
 
 @Controller('matchmaking')
 export class MatchmakingController {
   constructor(
     private readonly participantProfileService: ParticipantProfileService,
     private readonly matchmakingService: MatchmakingService,
+    private readonly nasaApiService: NasaApiService,
+    private readonly nasaSyncService: NasaSyncService,
   ) {}
 
   // Profile Management Endpoints
@@ -186,6 +191,15 @@ export class MatchmakingController {
   // Matchmaking Endpoints
   @Post('find-matches')
   async findMatches(@Body(ValidationPipe) findMatchesDto: FindMatchesDto) {
+    logger.debug('CONTROLLER DEBUG: findMatches endpoint called', {
+      email: findMatchesDto.email,
+      teamSize: findMatchesDto.teamSize,
+      challengeCategories: findMatchesDto.challengeCategories,
+      minMatchScore: findMatchesDto.minMatchScore,
+      timestamp: new Date().toISOString(),
+      endpoint: '/matchmaking/find-matches'
+    });
+
     try {
       const options = {
         teamSize: findMatchesDto.teamSize,
@@ -193,14 +207,34 @@ export class MatchmakingController {
         minMatchScore: findMatchesDto.minMatchScore,
       };
 
+      logger.debug('CONTROLLER DEBUG: Calling matchmaking service with options', {
+        email: findMatchesDto.email,
+        options,
+        timestamp: new Date().toISOString()
+      });
+
       const matches = await this.matchmakingService.findMatches(findMatchesDto.email, options);
       
+      logger.debug('CONTROLLER DEBUG: Matchmaking service returned matches', {
+        email: findMatchesDto.email,
+        matchCount: matches.length,
+        matchIds: matches.map(m => m.id),
+        timestamp: new Date().toISOString()
+      });
+
       return {
         success: true,
         count: matches.length,
         matches: matches.map(match => match.toJSON()),
       };
     } catch (error) {
+      logger.error('CONTROLLER DEBUG: Error in findMatches endpoint', {
+        email: findMatchesDto.email,
+        error: error.message,
+        stack: error.stack,
+        timestamp: new Date().toISOString()
+      });
+
       if (error.message.includes('Invalid email format')) {
         throw new HttpException('Invalid email format', HttpStatus.BAD_REQUEST);
       }
@@ -294,13 +328,29 @@ export class MatchmakingController {
   @Post('generate-teams')
   async generateTeamRecommendations(@Query('teamSize') teamSize?: number) {
     try {
-      const size = teamSize ? parseInt(teamSize.toString()) : undefined;
-      const recommendations = await this.matchmakingService.generateTeamRecommendations(size);
+      // Get all profiles for team generation
+      const allProfiles = await this.participantProfileService.getAllProfiles();
+      if (allProfiles.length === 0) {
+        return {
+          success: false,
+          message: 'No profiles available for team generation',
+          recommendations: []
+        };
+      }
+      
+      // Use first profile as example target for team generation
+      const targetProfile = allProfiles[0];
+      const maxTeams = teamSize ? parseInt(teamSize.toString()) : 5;
+      const recommendations = await this.matchmakingService.generateTeamRecommendations(
+        targetProfile, 
+        allProfiles, 
+        maxTeams
+      );
       
       return {
         success: true,
         count: recommendations.length,
-        recommendations: recommendations.map(rec => rec.toJSON()),
+        recommendations: recommendations,
       };
     } catch {
       throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -354,6 +404,86 @@ export class MatchmakingController {
     }
   }
 
+  @Get('best-matches/:email')
+  async getBestMatches(
+    @Param('email') email: string, 
+    @Query('limit') limit?: number,
+    @Query('includeTeams') includeTeams?: string
+  ) {
+    try {
+      const limitNum = limit ? parseInt(limit.toString()) : 20;
+      const shouldIncludeTeams = includeTeams === 'true';
+      
+      // Get all profiles first
+      const allProfiles = await this.participantProfileService.getAllProfiles();
+      const targetProfile = allProfiles.find(p => p.email.value === email);
+      
+      if (!targetProfile) {
+        throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
+      }
+
+      // Calculate individual matches with other participants
+      const individualMatches: any[] = [];
+      for (const profile of allProfiles) {
+        if (profile.email.value !== email) {
+          const match = await this.matchmakingService.findIndividualMatch(targetProfile, profile);
+          individualMatches.push({
+            participant: profile.toJSON(),
+            matchScore: match.matchScore,
+            reasoning: match.reasoning
+          });
+        }
+      }
+
+      // Sort by match score
+      individualMatches.sort((a, b) => b.matchScore.overall - a.matchScore.overall);
+      const topIndividualMatches = individualMatches.slice(0, limitNum);
+
+      let teamMatches: any[] = [];
+      if (shouldIncludeTeams) {
+        // Generate team recommendations directly
+        teamMatches = await this.matchmakingService.generateTeamRecommendations(
+          targetProfile, 
+          allProfiles, 
+          Math.min(5, Math.ceil(limitNum / 4))
+        );
+      }
+
+      return {
+        success: true,
+        targetParticipant: {
+          email: targetProfile.email.value,
+          fullName: targetProfile.fullName,
+          skills: targetProfile.skills,
+          expertiseLevel: targetProfile.expertiseLevel
+        },
+        individualMatches: {
+          count: topIndividualMatches.length,
+          matches: topIndividualMatches
+        },
+        teamMatches: {
+          count: teamMatches.length,
+          matches: teamMatches
+        },
+        summary: {
+          totalIndividualMatches: individualMatches.length,
+          averageMatchScore: individualMatches.length > 0 
+            ? individualMatches.reduce((sum, m) => sum + m.matchScore.overall, 0) / individualMatches.length 
+            : 0,
+          topMatchScore: individualMatches.length > 0 ? individualMatches[0].matchScore.overall : 0
+        }
+      };
+    } catch (error) {
+      if (error.message.includes('Invalid email format')) {
+        throw new HttpException('Invalid email format', HttpStatus.BAD_REQUEST);
+      }
+      if (error.message.includes('Profile not found')) {
+        throw new HttpException('Profile not found', HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   @Get('similar-profiles/:email')
   async findSimilarProfiles(@Param('email') email: string, @Query('limit') limit?: number) {
     try {
@@ -371,5 +501,177 @@ export class MatchmakingController {
       }
       throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  // NASA API Integration Endpoints
+  @Post('nasa/sync-participants')
+  async syncParticipantsFromNasa() {
+    try {
+      const result = await this.nasaSyncService.syncParticipantsFromNasa();
+      return {
+        success: true,
+        message: 'NASA participants sync completed',
+        result,
+      };
+    } catch (error) {
+      throw new HttpException('Failed to sync NASA participants' + error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('nasa/teams')
+  async getNasaTeams(@Query('limit') limit?: number) {
+    try {
+      const limitNum = limit ? parseInt(limit.toString()) : 50;
+      const teams = await this.nasaApiService.fetchTeams(limitNum);
+      
+      return {
+        success: true,
+        count: teams.length,
+        teams,
+      };
+    } catch (error: any) {
+      throw new HttpException('Failed to fetch NASA teams ' + error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('nasa/participants')
+  async getNasaParticipants(@Query('limit') limit?: number) {
+    try {
+      const limitNum = limit ? parseInt(limit.toString()) : 50;
+      const participants = await this.nasaApiService.fetchParticipants(limitNum);
+      
+      return {
+        success: true,
+        count: participants.length,
+        participants,
+      };
+    } catch (error) {
+      throw new HttpException('Failed to fetch NASA participants' + error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('nasa/challenges')
+  async getNasaChallenges(@Query('limit') limit?: number) {
+    try {
+      const limitNum = limit ? parseInt(limit.toString()) : 50;
+      const challenges = await this.nasaApiService.fetchChallenges(limitNum);
+      
+      return {
+        success: true,
+        count: challenges.length,
+        challenges,
+      };
+    } catch (error) {
+      throw new HttpException('Failed to fetch NASA challenges' + error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('nasa/sync-status')
+  async getNasaSyncStatus() {
+    try {
+      const stats = await this.nasaSyncService.getParticipantStats();
+      
+      return {
+        success: true,
+        stats,
+      };
+    } catch (error) {
+      throw new HttpException('Failed to get NASA sync status' + error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Post('nasa/full-sync')
+  async performFullNasaSync() {
+    try {
+      const data = await this.nasaApiService.syncData();
+      const syncResult = await this.nasaSyncService.syncParticipantsFromNasa();
+      
+      return {
+        success: true,
+        message: 'Full NASA data sync completed',
+        data: {
+          nasaData: {
+            teamsCount: data.teams.length,
+            participantsCount: data.participants.length,
+            challengesCount: data.challenges.length,
+          },
+          syncResult,
+        },
+      };
+    } catch (error) {
+      throw new HttpException('Failed to perform full NASA sync ' + error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  // Advanced Team Formation Endpoints
+  @Post('generate-diverse-teams')
+  async generateDiverseTeams(@Body() body: { teamSize?: number }) {
+    try {
+      const teamSize = body.teamSize || 4;
+      const allProfiles = await this.participantProfileService.getAllProfiles();
+      
+      if (allProfiles.length < teamSize) {
+        return {
+          success: false,
+          message: 'Not enough participants to form teams',
+          required: teamSize,
+          available: allProfiles.length,
+        };
+      }
+
+      const teams = await this.matchmakingService.generateDiverseTeams(allProfiles, { teamSize });
+      
+      return {
+        success: true,
+        message: 'Diverse teams generated successfully',
+        teamSize,
+        teamsGenerated: teams.length,
+        totalParticipants: allProfiles.length,
+        teams: teams.map(team => ({
+          teamId: team.id,
+          participants: team.participantEmails.map(email => email.value),
+          matchScore: team.matchScore,
+          algorithm: team.algorithm,
+          metadata: team.metadata,
+          createdAt: team.createdAt,
+        })),
+        summary: this.generateTeamsSummary(teams),
+      };
+    } catch (error) {
+      throw new HttpException('Failed to generate diverse ' + error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  private generateTeamsSummary(teams: any[]): any {
+    if (teams.length === 0) return null;
+
+    const teamTypes = new Map<string, number>();
+    let totalFemaleOnlyTeams = 0;
+    let totalMixedTeams = 0;
+    let totalMinorsTeams = 0;
+
+    teams.forEach(team => {
+      const teamType = team.metadata?.teamType || 'unknown';
+      teamTypes.set(teamType, (teamTypes.get(teamType) || 0) + 1);
+      
+      if (teamType === 'female-only') totalFemaleOnlyTeams++;
+      else if (teamType === 'mixed-adults') totalMixedTeams++;
+      else if (teamType === 'minors-only') totalMinorsTeams++;
+    });
+
+    const avgMatchScore = teams.reduce((sum, team) => sum + team.matchScore, 0) / teams.length;
+    const avgSkillsCount = teams.reduce((sum, team) => sum + (team.metadata?.skillsCount || 0), 0) / teams.length;
+
+    return {
+      totalTeams: teams.length,
+      averageMatchScore: Math.round(avgMatchScore * 100) / 100,
+      averageSkillsPerTeam: Math.round(avgSkillsCount),
+      teamTypes: Object.fromEntries(teamTypes),
+      breakdown: {
+        femaleOnlyTeams: totalFemaleOnlyTeams,
+        mixedAdultTeams: totalMixedTeams,
+        minorsOnlyTeams: totalMinorsTeams,
+      },
+    };
   }
 }
