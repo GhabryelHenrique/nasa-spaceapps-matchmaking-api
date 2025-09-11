@@ -1,0 +1,30 @@
+[Unit]
+Description=NASA Space Apps Matchmaking API
+Documentation=https://github.com/yourusername/nasa-spaceapps-matchmaking-api
+After=network.target
+
+[Service]
+Type=simple
+User=nodeuser
+WorkingDirectory=/opt/nasa-matchmaking-api
+Environment=NODE_ENV=production
+Environment=PORT=3000
+ExecStart=/usr/bin/node dist/main.js
+Restart=on-failure
+RestartSec=10
+KillMode=mixed
+KillSignal=SIGINT
+TimeoutStopSec=5
+SyslogIdentifier=nasa-matchmaking-api
+StandardOutput=journal
+StandardError=journal
+
+# Security settings
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/nasa-matchmaking-api
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

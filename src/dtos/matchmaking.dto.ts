@@ -14,6 +14,7 @@ import {
   IsBoolean
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class WorkExperienceDto {
   @IsNotEmpty()
@@ -101,19 +102,36 @@ export class PreferencesDto {
 }
 
 export class CreateParticipantProfileDto {
+  @ApiProperty({ 
+    example: 'user@example.com', 
+    description: 'Participant email address' 
+  })
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
+  @ApiProperty({ 
+    example: 'John Doe', 
+    description: 'Full name of the participant' 
+  })
   @IsString()
   @IsNotEmpty()
   fullName: string;
 
+  @ApiProperty({ 
+    example: ['JavaScript', 'Python', 'Data Analysis'], 
+    description: 'Technical skills and competencies' 
+  })
   @IsArray()
   @ArrayMinSize(1)
   @IsString({ each: true })
   skills: string[];
 
+  @ApiProperty({ 
+    example: 'intermediate', 
+    enum: ['beginner', 'intermediate', 'advanced', 'expert'], 
+    description: 'Overall expertise level' 
+  })
   @IsEnum(['beginner', 'intermediate', 'advanced', 'expert'])
   expertiseLevel: 'beginner' | 'intermediate' | 'advanced' | 'expert';
 
@@ -258,21 +276,41 @@ export class UpdateParticipantProfileDto {
 }
 
 export class FindMatchesDto {
+  @ApiProperty({ 
+    example: 'user@example.com', 
+    description: 'Email of participant looking for matches' 
+  })
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
+  @ApiPropertyOptional({ 
+    example: 4, 
+    minimum: 2, 
+    maximum: 6, 
+    description: 'Preferred team size' 
+  })
   @IsOptional()
   @IsNumber()
   @Min(2)
   @Max(6)
   teamSize?: number;
 
+  @ApiPropertyOptional({ 
+    example: ['Data Science', 'Web Development'], 
+    description: 'Challenge categories of interest' 
+  })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
   challengeCategories?: string[];
 
+  @ApiPropertyOptional({ 
+    example: 0.75, 
+    minimum: 0.5, 
+    maximum: 1.0, 
+    description: 'Minimum match score threshold' 
+  })
   @IsOptional()
   @IsNumber()
   @Min(0.5)

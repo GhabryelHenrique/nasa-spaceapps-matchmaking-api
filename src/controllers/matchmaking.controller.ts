@@ -11,6 +11,7 @@ import {
   HttpStatus,
   ValidationPipe,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
 import { ParticipantProfileService } from '../services/participant-profile.service';
 import { MatchmakingService } from '../services/matchmaking.service';
 import { NasaApiService } from '../services/nasa-api.service';
@@ -23,6 +24,7 @@ import {
 import { CompleteProfileDto } from '../dtos/profile-completion.dto';
 import { logger } from '../infrastructure/config/logger.config';
 
+@ApiTags('matchmaking')
 @Controller('matchmaking')
 export class MatchmakingController {
   constructor(
@@ -34,6 +36,11 @@ export class MatchmakingController {
 
   // Profile Management Endpoints
   @Post('profile')
+  @ApiOperation({ summary: 'Create participant profile' })
+  @ApiBody({ type: CreateParticipantProfileDto })
+  @ApiResponse({ status: 201, description: 'Profile created successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid email format' })
+  @ApiResponse({ status: 409, description: 'Profile already exists' })
   async createProfile(@Body(ValidationPipe) createProfileDto: CreateParticipantProfileDto) {
     try {
       const profile = await this.participantProfileService.createProfile(createProfileDto);
@@ -54,6 +61,11 @@ export class MatchmakingController {
   }
 
   @Get('profile/:email')
+  @ApiOperation({ summary: 'Get participant profile by email' })
+  @ApiParam({ name: 'email', description: 'Participant email address' })
+  @ApiResponse({ status: 200, description: 'Profile retrieved successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid email format' })
+  @ApiResponse({ status: 404, description: 'Profile not found' })
   async getProfile(@Param('email') email: string) {
     try {
       const profile = await this.participantProfileService.getProfile(email);
@@ -190,6 +202,10 @@ export class MatchmakingController {
 
   // Matchmaking Endpoints
   @Post('find-matches')
+  @ApiOperation({ summary: 'Find team matches for a participant' })
+  @ApiBody({ type: FindMatchesDto })
+  @ApiResponse({ status: 200, description: 'Matches found successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid email format' })
   async findMatches(@Body(ValidationPipe) findMatchesDto: FindMatchesDto) {
     logger.debug('CONTROLLER DEBUG: findMatches endpoint called', {
       email: findMatchesDto.email,
