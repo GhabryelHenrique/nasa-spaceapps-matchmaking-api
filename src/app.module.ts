@@ -4,6 +4,7 @@ import { APP_PIPE } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ControllersModule } from './controllers/controllers.module';
+import { NestJSLoggerAdapter } from './infrastructure/adapters/nestjs-logger.adapter';
 
 @Module({
   imports: [
@@ -17,6 +18,11 @@ import { ControllersModule } from './controllers/controllers.module';
       provide: APP_PIPE,
       useClass: ValidationPipe,
     },
+    {
+      provide: 'LoggerPort',
+      useClass: NestJSLoggerAdapter,
+    },
+    NestJSLoggerAdapter,
   ],
 })
 export class AppModule {}

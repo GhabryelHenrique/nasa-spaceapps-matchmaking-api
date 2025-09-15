@@ -7,15 +7,21 @@ import {
   HttpException,
   HttpStatus,
   ValidationPipe,
+  Inject,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiBody } from '@nestjs/swagger';
 import { RegistrationService } from '../services/registration.service';
 import { CheckEmailDto, VerifyCodeDto } from '../dtos/registration.dto';
+import type { LoggerPort } from '../application/ports/logger.port';
+import { auditLogger, performanceLogger } from '../infrastructure/config/logger.config';
 
 @ApiTags('registration')
 @Controller('registration')
 export class RegistrationController {
-  constructor(private readonly registrationService: RegistrationService) {}
+  constructor(
+    private readonly registrationService: RegistrationService,
+    @Inject('LoggerPort') private readonly logger: LoggerPort
+  ) {}
 
   @Get('check-email')
   @ApiOperation({ summary: 'Check if email is registered and send authentication code' })
@@ -23,9 +29,38 @@ export class RegistrationController {
   @ApiResponse({ status: 200, description: 'Email check result and authentication code sent' })
   @ApiResponse({ status: 400, description: 'Invalid email format' })
   async checkEmail(@Query(ValidationPipe) query: CheckEmailDto) {
+    const startTime = Date.now();
+    this.logger.info('Email check request received', 'RegistrationController', {
+      email: query.email,
+      endpoint: 'check-email'
+    });
+
     try {
-      return await this.registrationService.checkEmailRegistration(query.email);
+      const result = await this.registrationService.checkEmailRegistration(query.email);
+      
+      performanceLogger('Email check', Date.now() - startTime, {
+        email: query.email,
+        isRegistered: result.isRegistered
+      });
+      
+      auditLogger('Email check performed', query.email, {
+        isRegistered: result.isRegistered,
+        authCodeSent: true
+      });
+      
+      this.logger.info('Email check completed successfully', 'RegistrationController', {
+        email: query.email,
+        isRegistered: result.isRegistered,
+        duration: Date.now() - startTime
+      });
+      
+      return result;
     } catch (error) {
+      this.logger.error('Email check failed', error, 'RegistrationController', {
+        email: query.email,
+        duration: Date.now() - startTime
+      });
+      
       if (error.message.includes('Invalid email format')) {
         throw new HttpException('Invalid email format', HttpStatus.BAD_REQUEST);
       }
@@ -40,12 +75,38 @@ export class RegistrationController {
   @ApiResponse({ status: 400, description: 'Invalid email format' })
   @ApiResponse({ status: 401, description: 'Invalid or expired authentication code' })
   async verifyCode(@Body(ValidationPipe) body: VerifyCodeDto) {
+    const startTime = Date.now();
+    this.logger.info('Auth code verification request received', 'RegistrationController', {
+      email: body.email,
+      endpoint: 'verify-code'
+    });
+
     try {
       const result = await this.registrationService.verifyAuthCode(body.email, body.code);
 
       if (!result.authenticated) {
+        this.logger.warn('Auth code verification failed', 'RegistrationController', {
+          email: body.email,
+          reason: result.message,
+          duration: Date.now() - startTime
+        });
         throw new HttpException(result.message, HttpStatus.UNAUTHORIZED);
       }
+
+      performanceLogger('Auth code verification', Date.now() - startTime, {
+        email: body.email,
+        success: true
+      });
+      
+      auditLogger('Authentication successful', body.email, {
+        profileCreated: result.profileCreated
+      });
+      
+      this.logger.info('Auth code verified successfully', 'RegistrationController', {
+        email: body.email,
+        profileCreated: result.profileCreated,
+        duration: Date.now() - startTime
+      });
 
       return {
         email: result.email,
@@ -58,6 +119,12 @@ export class RegistrationController {
       if (error instanceof HttpException) {
         throw error;
       }
+      
+      this.logger.error('Auth code verification error', error, 'RegistrationController', {
+        email: body.email,
+        duration: Date.now() - startTime
+      });
+      
       if (error.message.includes('Invalid email format')) {
         throw new HttpException('Invalid email format', HttpStatus.BAD_REQUEST);
       }

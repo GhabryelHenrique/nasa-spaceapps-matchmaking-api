@@ -10,8 +10,9 @@ import {
   HttpException,
   HttpStatus,
   ValidationPipe,
+  Inject,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 import { ParticipantProfileService } from '../services/participant-profile.service';
 import { MatchmakingService } from '../services/matchmaking.service';
 import { NasaApiService } from '../services/nasa-api.service';
@@ -22,7 +23,8 @@ import {
   FindMatchesDto,
 } from '../dtos/matchmaking.dto';
 import { CompleteProfileDto } from '../dtos/profile-completion.dto';
-import { logger } from '../infrastructure/config/logger.config';
+import type { LoggerPort } from '../application/ports/logger.port';
+import { auditLogger, performanceLogger } from '../infrastructure/config/logger.config';
 
 @ApiTags('matchmaking')
 @Controller('matchmaking')
@@ -32,6 +34,7 @@ export class MatchmakingController {
     private readonly matchmakingService: MatchmakingService,
     private readonly nasaApiService: NasaApiService,
     private readonly nasaSyncService: NasaSyncService,
+    @Inject('LoggerPort') private readonly logger: LoggerPort,
   ) {}
 
   // Profile Management Endpoints
@@ -207,12 +210,11 @@ export class MatchmakingController {
   @ApiResponse({ status: 200, description: 'Matches found successfully' })
   @ApiResponse({ status: 400, description: 'Invalid email format' })
   async findMatches(@Body(ValidationPipe) findMatchesDto: FindMatchesDto) {
-    logger.debug('CONTROLLER DEBUG: findMatches endpoint called', {
+    this.logger.debug('findMatches endpoint called', 'MatchmakingController', {
       email: findMatchesDto.email,
       teamSize: findMatchesDto.teamSize,
       challengeCategories: findMatchesDto.challengeCategories,
       minMatchScore: findMatchesDto.minMatchScore,
-      timestamp: new Date().toISOString(),
       endpoint: '/matchmaking/find-matches'
     });
 
@@ -223,19 +225,17 @@ export class MatchmakingController {
         minMatchScore: findMatchesDto.minMatchScore,
       };
 
-      logger.debug('CONTROLLER DEBUG: Calling matchmaking service with options', {
+      this.logger.debug('Calling matchmaking service with options', 'MatchmakingController', {
         email: findMatchesDto.email,
-        options,
-        timestamp: new Date().toISOString()
+        options
       });
 
       const matches = await this.matchmakingService.findMatches(findMatchesDto.email, options);
       
-      logger.debug('CONTROLLER DEBUG: Matchmaking service returned matches', {
+      this.logger.debug('Matchmaking service returned matches', 'MatchmakingController', {
         email: findMatchesDto.email,
         matchCount: matches.length,
-        matchIds: matches.map(m => m.id),
-        timestamp: new Date().toISOString()
+        matchIds: matches.map(m => m.id)
       });
 
       return {
@@ -244,11 +244,8 @@ export class MatchmakingController {
         matches: matches.map(match => match.toJSON()),
       };
     } catch (error) {
-      logger.error('CONTROLLER DEBUG: Error in findMatches endpoint', {
-        email: findMatchesDto.email,
-        error: error.message,
-        stack: error.stack,
-        timestamp: new Date().toISOString()
+      this.logger.error('Error in findMatches endpoint', error, 'MatchmakingController', {
+        email: findMatchesDto.email
       });
 
       if (error.message.includes('Invalid email format')) {

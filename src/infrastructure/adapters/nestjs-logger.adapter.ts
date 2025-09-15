@@ -1,41 +1,82 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { LoggerPort } from '../../application/ports/logger.port';
+import { logger as winstonLogger } from '../config/logger.config';
+import * as os from 'os';
 
 @Injectable()
 export class NestJSLoggerAdapter implements LoggerPort {
-  private readonly logger = new Logger('NASA-SpaceApps-API');
+  private readonly nestLogger = new Logger('NASA-SpaceApps-API');
+
+  log(message: any, ...optionalParams: any[]): any {
+    this.nestLogger.log(message, ...optionalParams);
+  }
 
   info(message: string, context?: string, meta?: any): void {
-    const timestamp = new Date().toISOString();
-    const logMessage = meta ? `${message} | ${JSON.stringify(meta)}` : message;
-    this.logger.log(`[${timestamp}] ${logMessage}`, context);
+    const logData = {
+      level: 'info',
+      message,
+      context: context || 'Application',
+      timestamp: new Date().toISOString(),
+      pid: process.pid,
+      hostname: os.hostname(),
+      ...meta
+    };
+
+    winstonLogger.info(logData);
+    this.nestLogger.log(message, context);
   }
 
   warn(message: string, context?: string, meta?: any): void {
-    const timestamp = new Date().toISOString();
-    const logMessage = meta ? `${message} | ${JSON.stringify(meta)}` : message;
-    this.logger.warn(`[${timestamp}] ${logMessage}`, context);
+    const logData = {
+      level: 'warn',
+      message,
+      context: context || 'Application',
+      timestamp: new Date().toISOString(),
+      pid: process.pid,
+      hostname: os.hostname(),
+      ...meta
+    };
+
+    winstonLogger.warn(logData);
+    this.nestLogger.warn(message, context);
   }
 
   error(message: string, error?: any, context?: string, meta?: any): void {
-    const timestamp = new Date().toISOString();
     const errorDetails = error ? {
+      name: error.name,
       message: error.message,
       stack: error.stack,
       code: error.code,
+      statusCode: error.statusCode,
+    } : {};
+
+    const logData = {
+      level: 'error',
+      message,
+      context: context || 'Application',
+      timestamp: new Date().toISOString(),
+      pid: process.pid,
+      hostname: os.hostname(),
+      error: errorDetails,
       ...meta
-    } : meta;
-    
-    const logMessage = errorDetails ? 
-      `${message} | ${JSON.stringify(errorDetails)}` : 
-      message;
-    
-    this.logger.error(`[${timestamp}] ${logMessage}`, error?.stack, context);
+    };
+
+    winstonLogger.error(logData);
+    this.nestLogger.error(message, error?.stack, context);
   }
 
   debug(message: string, context?: string, meta?: any): void {
-    const timestamp = new Date().toISOString();
-    const logMessage = meta ? `${message} | ${JSON.stringify(meta)}` : message;
-    this.logger.debug(`[${timestamp}] ${logMessage}`, context);
+    const logData = {
+      level: 'debug',
+      message,
+      context: context || 'Application',
+      timestamp: new Date().toISOString(),
+      pid: process.pid,
+      hostname: os.hostname(),
+      ...meta
+    };
+
+    winstonLogger.debug(logData);
+    this.nestLogger.debug(message, context);
   }
 }

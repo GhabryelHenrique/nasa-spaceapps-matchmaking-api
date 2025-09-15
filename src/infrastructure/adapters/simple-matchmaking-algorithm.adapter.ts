@@ -139,7 +139,7 @@ export class SimpleMatchmakingAlgorithmAdapter implements MatchmakingAlgorithmPo
     const result: ParticipantProfile[] = [];
     const groupArrays = Array.from(grouped.values());
     
-    let maxLength = Math.max(...groupArrays.map(arr => arr.length));
+    const maxLength = Math.max(...groupArrays.map(arr => arr.length));
     
     for (let i = 0; i < maxLength; i++) {
       groupArrays.forEach(group => {
