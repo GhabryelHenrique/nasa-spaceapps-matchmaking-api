@@ -35,9 +35,11 @@ bash deploy.sh
 ### Server Requirements
 
 The deployment assumes your server has:
-- Node.js (will be handled by the deployment script)
+- Node.js 20+ (will be installed/upgraded by the deployment script)
 - Git
 - PM2 (recommended) or basic process management
+
+**Note**: The project requires Node.js 20+ due to NestJS 11 dependencies. The deployment script will automatically upgrade Node.js if needed.
 
 ### Environment Variables
 

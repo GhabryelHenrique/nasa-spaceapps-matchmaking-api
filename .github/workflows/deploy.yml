@@ -16,11 +16,11 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'npm'
         
     - name: Install dependencies
-      run: npm ci
+      run: npm install
       
     - name: Build application
       run: npm run build
@@ -46,8 +46,14 @@ jobs:
             git clone https://github.com/${{ github.repository }} .
           fi
           
+          # Install Node.js 20 if needed
+          if ! node --version | grep -q "v20"; then
+            curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+          fi
+          
           # Install dependencies and build
-          npm ci
+          npm install
           npm run build
           
           # Restart the application (using PM2 if available, otherwise kill and restart)

@@ -30,9 +30,16 @@ echo "Pulling latest changes..." | tee -a $LOG_FILE
 git fetch origin
 git reset --hard origin/master
 
+# Check Node.js version and upgrade if needed
+if ! node --version | grep -q "v20"; then
+    echo "Installing Node.js 20..." | tee -a $LOG_FILE
+    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+fi
+
 # Install dependencies
 echo "Installing dependencies..." | tee -a $LOG_FILE
-npm ci
+npm install
 
 # Build the application
 echo "Building application..." | tee -a $LOG_FILE
