@@ -103,6 +103,9 @@ export class ParticipantProfileDocument extends Document {
   @Prop({ required: true })
   fullName: string;
 
+  @Prop({ required: true })
+  phoneNumber: string;
+
   @Prop({ type: [String], required: true })
   skills: string[];
 

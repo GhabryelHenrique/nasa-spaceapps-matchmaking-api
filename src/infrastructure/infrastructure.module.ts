@@ -6,17 +6,22 @@ import { MongoDBParticipantProfileRepositoryAdapter } from './adapters/mongodb-p
 import { MongoDBUserRepositoryAdapter } from './adapters/mongodb-user-repository.adapter';
 import { NodemailerEmailServiceAdapter } from './adapters/nodemailer-email-service.adapter';
 import { NestJSLoggerAdapter } from './adapters/nestjs-logger.adapter';
+import { DatabaseLoggerAdapter } from './adapters/database-logger.adapter';
+import { MongodbLogRepositoryAdapter } from './adapters/mongodb-log-repository.adapter';
 import { InMemoryTeamMatchRepositoryAdapter } from './adapters/in-memory-team-match-repository.adapter';
 import { SimpleMatchmakingAlgorithmAdapter } from './adapters/simple-matchmaking-algorithm.adapter';
 import { AuthCodeDocument, AuthCodeSchema } from './schemas/auth-code.schema';
 import { ParticipantProfileDocument, ParticipantProfileSchema } from './schemas/participant-profile.schema';
 import { UserDocument, UserSchema } from './schemas/user.schema';
+import { SystemLogDocument, SystemLogSchema } from './schemas/system-log.schema';
 import {
   USER_REPOSITORY_TOKEN,
   USER_REPOSITORY_MONGODB_TOKEN,
   AUTH_CODE_REPOSITORY_TOKEN,
   EMAIL_SERVICE_TOKEN,
   LOGGER_TOKEN,
+  LOG_REPOSITORY_TOKEN,
+  CONSOLE_LOGGER_TOKEN,
   PARTICIPANT_PROFILE_REPOSITORY_TOKEN,
   TEAM_MATCH_REPOSITORY_TOKEN,
   MATCHMAKING_ALGORITHM_TOKEN,
@@ -28,6 +33,7 @@ import {
       { name: AuthCodeDocument.name, schema: AuthCodeSchema },
       { name: ParticipantProfileDocument.name, schema: ParticipantProfileSchema },
       { name: UserDocument.name, schema: UserSchema },
+      { name: SystemLogDocument.name, schema: SystemLogSchema },
     ]),
   ],
   providers: [
@@ -44,8 +50,16 @@ import {
       useClass: NodemailerEmailServiceAdapter,
     },
     {
-      provide: LOGGER_TOKEN,
+      provide: CONSOLE_LOGGER_TOKEN,
       useClass: NestJSLoggerAdapter,
+    },
+    {
+      provide: LOG_REPOSITORY_TOKEN,
+      useClass: MongodbLogRepositoryAdapter,
+    },
+    {
+      provide: LOGGER_TOKEN,
+      useClass: DatabaseLoggerAdapter,
     },
     {
       provide: PARTICIPANT_PROFILE_REPOSITORY_TOKEN,
@@ -70,6 +84,8 @@ import {
     AUTH_CODE_REPOSITORY_TOKEN,
     EMAIL_SERVICE_TOKEN,
     LOGGER_TOKEN,
+    LOG_REPOSITORY_TOKEN,
+    CONSOLE_LOGGER_TOKEN,
     PARTICIPANT_PROFILE_REPOSITORY_TOKEN,
     TEAM_MATCH_REPOSITORY_TOKEN,
     MATCHMAKING_ALGORITHM_TOKEN,

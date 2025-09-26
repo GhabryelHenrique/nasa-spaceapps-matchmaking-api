@@ -15,12 +15,14 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 import { ParticipantProfileService } from '../services/participant-profile.service';
 import { MatchmakingService } from '../services/matchmaking.service';
+import { EmailService } from '../services/email.service';
 import { NasaApiService } from '../services/nasa-api.service';
 import { NasaSyncService } from '../services/nasa-sync.service';
 import {
   CreateParticipantProfileDto,
   UpdateParticipantProfileDto,
   FindMatchesDto,
+  SendMatchNotificationDto,
 } from '../dtos/matchmaking.dto';
 import { CompleteProfileDto } from '../dtos/profile-completion.dto';
 import type { LoggerPort } from '../application/ports/logger.port';
@@ -32,6 +34,7 @@ export class MatchmakingController {
   constructor(
     private readonly participantProfileService: ParticipantProfileService,
     private readonly matchmakingService: MatchmakingService,
+    private readonly emailService: EmailService,
     private readonly nasaApiService: NasaApiService,
     private readonly nasaSyncService: NasaSyncService,
     @Inject('LoggerPort') private readonly logger: LoggerPort,
@@ -382,6 +385,75 @@ export class MatchmakingController {
         matches: matches.map(match => match.toJSON()),
       };
     } catch {
+      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  // Match Notification Endpoints
+  @Post('send-match-notification')
+  @ApiOperation({ summary: 'Send match notification email to a participant' })
+  @ApiBody({ type: SendMatchNotificationDto })
+  @ApiResponse({ status: 200, description: 'Match notification sent successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid email format or missing participant profiles' })
+  @ApiResponse({ status: 404, description: 'Participant not found' })
+  async sendMatchNotification(@Body(ValidationPipe) sendNotificationDto: SendMatchNotificationDto) {
+    try {
+      // Get both sender and recipient profiles to extract names and phone number
+      const senderProfile = await this.participantProfileService.getProfile(sendNotificationDto.senderEmail);
+      const recipientProfile = await this.participantProfileService.getProfile(sendNotificationDto.recipientEmail);
+
+      if (!senderProfile) {
+        throw new HttpException('Sender profile not found', HttpStatus.NOT_FOUND);
+      }
+
+      if (!recipientProfile) {
+        throw new HttpException('Recipient profile not found', HttpStatus.NOT_FOUND);
+      }
+
+      if (!senderProfile.phoneNumber) {
+        throw new HttpException('Sender must have a phone number to send match notifications', HttpStatus.BAD_REQUEST);
+      }
+
+      // Send the match notification email
+      const emailSent = await this.emailService.sendMatchNotification(
+        sendNotificationDto.senderEmail,
+        senderProfile.fullName,
+        sendNotificationDto.recipientEmail,
+        recipientProfile.fullName,
+        senderProfile.phoneNumber
+      );
+
+      if (!emailSent) {
+        throw new HttpException('Failed to send match notification email', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+
+      this.logger.info('Match notification sent successfully', 'MatchmakingController', {
+        senderEmail: sendNotificationDto.senderEmail,
+        recipientEmail: sendNotificationDto.recipientEmail,
+        senderName: senderProfile.fullName,
+        recipientName: recipientProfile.fullName
+      });
+
+      return {
+        success: true,
+        message: 'Match notification sent successfully',
+        data: {
+          senderName: senderProfile.fullName,
+          recipientName: recipientProfile.fullName,
+          senderPhoneNumber: senderProfile.phoneNumber
+        }
+      };
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      if (error.message.includes('Invalid email format')) {
+        throw new HttpException('Invalid email format', HttpStatus.BAD_REQUEST);
+      }
+      this.logger.error('Error sending match notification', error, 'MatchmakingController', {
+        senderEmail: sendNotificationDto.senderEmail,
+        recipientEmail: sendNotificationDto.recipientEmail
+      });
       throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

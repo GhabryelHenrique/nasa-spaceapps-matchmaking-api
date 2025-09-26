@@ -1,17 +1,18 @@
-import { 
-  IsEmail, 
-  IsNotEmpty, 
-  IsString, 
-  IsArray, 
-  IsEnum, 
-  IsOptional, 
-  IsNumber, 
-  IsUrl, 
-  ValidateNested, 
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  IsArray,
+  IsEnum,
+  IsOptional,
+  IsNumber,
+  IsUrl,
+  ValidateNested,
   ArrayMinSize,
   Min,
   Max,
-  IsBoolean
+  IsBoolean,
+  Matches
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -102,13 +103,22 @@ export class PreferencesDto {
 }
 
 export class CreateParticipantProfileDto {
-  @ApiProperty({ 
-    example: 'user@example.com', 
-    description: 'Participant email address' 
+  @ApiProperty({
+    example: 'user@example.com',
+    description: 'Participant email address'
   })
   @IsEmail()
   @IsNotEmpty()
   email: string;
+
+  @ApiProperty({
+    example: '+5511999999999',
+    description: 'Phone number with country code'
+  })
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/^\+[1-9]\d{1,14}$/, { message: 'Phone number must be in international format (e.g., +5511999999999)' })
+  phoneNumber: string;
 
   @ApiProperty({ 
     example: 'John Doe', 
@@ -212,6 +222,11 @@ export class UpdateParticipantProfileDto {
   @IsOptional()
   @IsString()
   fullName?: string;
+
+  @IsOptional()
+  @IsString()
+  @Matches(/^\+[1-9]\d{1,14}$/, { message: 'Phone number must be in international format (e.g., +5511999999999)' })
+  phoneNumber?: string;
 
   @IsOptional()
   @IsArray()
@@ -343,4 +358,22 @@ export class TeamMatchResponseDto {
     isHighQuality: boolean;
     isViable: boolean;
   };
+}
+
+export class SendMatchNotificationDto {
+  @ApiProperty({
+    example: 'sender@example.com',
+    description: 'Email of the person sending the match notification'
+  })
+  @IsEmail()
+  @IsNotEmpty()
+  senderEmail: string;
+
+  @ApiProperty({
+    example: 'recipient@example.com',
+    description: 'Email of the person receiving the match notification'
+  })
+  @IsEmail()
+  @IsNotEmpty()
+  recipientEmail: string;
 }

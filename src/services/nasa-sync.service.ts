@@ -90,6 +90,7 @@ export class NasaSyncService {
     return {
       email: participant.email,
       fullName: `${participant.firstName || ''} ${participant.lastName || ''}`.trim(),
+      phoneNumber: participant.phone || '+5511999999999', // Default phone number for NASA participants
       skills,
       expertiseLevel,
       education: participant.bio ? this.extractEducationFromBio(participant.bio) : '',

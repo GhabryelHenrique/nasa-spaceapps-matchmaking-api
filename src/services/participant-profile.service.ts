@@ -62,6 +62,7 @@ export class ParticipantProfileService {
       const profile = ParticipantProfile.create({
         email,
         fullName: enrichedProfileData.fullName,
+        phoneNumber: enrichedProfileData.phoneNumber,
         skills: enrichedProfileData.skills || [],
         expertiseLevel: enrichedProfileData.expertiseLevel || 'beginner',
         workExperience: enrichedProfileData.workExperience || [],
@@ -272,6 +273,9 @@ export class ParticipantProfileService {
       ...profileData,
       // Map full name from Google Sheets
       fullName: profileData.fullName || userData['Nome e Sobrenome:'] || userData.fullName || 'Unknown',
+
+      // Map phone number from Google Sheets or profile data
+      phoneNumber: profileData.phoneNumber || userData['Telefone de Contato:'] || userData.phone,
       
       // Map education from Google Sheets
       education: profileData.education || userData['Escolaridade:'] || userData.education || 'Não especificado',

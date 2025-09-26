@@ -319,6 +319,7 @@ export class MongoDBParticipantProfileRepositoryAdapter implements ParticipantPr
     return ParticipantProfile.create({
       email: new Email(document.email),
       fullName: document.fullName,
+      phoneNumber: document.phoneNumber,
       skills: document.skills,
       expertiseLevel: document.expertiseLevel as 'beginner' | 'intermediate' | 'advanced' | 'expert',
       workExperience: document.workExperience.map(exp => ({

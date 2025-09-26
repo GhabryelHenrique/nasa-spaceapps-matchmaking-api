@@ -45,6 +45,7 @@ export class ParticipantProfile {
     public readonly id: string,
     public readonly email: Email,
     public readonly fullName: string,
+    public readonly phoneNumber: string,
     public readonly skills: string[],
     public readonly expertiseLevel: 'beginner' | 'intermediate' | 'advanced' | 'expert',
     public readonly workExperience: WorkExperience[],
@@ -71,6 +72,7 @@ export class ParticipantProfile {
   static create(data: {
     email: Email;
     fullName: string;
+    phoneNumber: string;
     skills: string[];
     expertiseLevel: 'beginner' | 'intermediate' | 'advanced' | 'expert';
     workExperience: WorkExperience[];
@@ -95,6 +97,7 @@ export class ParticipantProfile {
       data.email.value, // Using email as ID for simplicity
       data.email,
       data.fullName,
+      data.phoneNumber,
       data.skills,
       data.expertiseLevel,
       data.workExperience,
@@ -122,6 +125,7 @@ export class ParticipantProfile {
       this.id,
       this.email,
       data.fullName ?? this.fullName,
+      data.phoneNumber ?? this.phoneNumber,
       data.skills ?? this.skills,
       data.expertiseLevel ?? this.expertiseLevel,
       data.workExperience ?? this.workExperience,
@@ -208,6 +212,7 @@ export class ParticipantProfile {
       id: this.id,
       email: this.email.value,
       fullName: this.fullName,
+      phoneNumber: this.phoneNumber,
       skills: this.skills,
       expertiseLevel: this.expertiseLevel,
       workExperience: this.workExperience,

@@ -34,4 +34,50 @@ export class EmailService {
       return false;
     }
   }
+
+  async sendMatchNotification(
+    senderEmail: string,
+    senderName: string,
+    recipientEmail: string,
+    recipientName: string,
+    senderPhoneNumber: string
+  ): Promise<boolean> {
+    this.logger.info('Sending match notification email', 'EmailService', {
+      senderEmail,
+      recipientEmail
+    });
+
+    try {
+      const senderEmailVo = new Email(senderEmail);
+      const recipientEmailVo = new Email(recipientEmail);
+
+      const result = await this.emailServicePort.sendMatchNotification(
+        senderEmailVo,
+        senderName,
+        recipientEmailVo,
+        recipientName,
+        senderPhoneNumber
+      );
+
+      if (result) {
+        this.logger.info('Match notification email sent successfully', 'EmailService', {
+          senderEmail,
+          recipientEmail
+        });
+      } else {
+        this.logger.warn('Failed to send match notification email', 'EmailService', {
+          senderEmail,
+          recipientEmail
+        });
+      }
+
+      return result;
+    } catch (error) {
+      this.logger.error('Error sending match notification email', error, 'EmailService', {
+        senderEmail,
+        recipientEmail
+      });
+      return false;
+    }
+  }
 }

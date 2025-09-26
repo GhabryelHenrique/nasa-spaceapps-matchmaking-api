@@ -48,6 +48,7 @@ fi
 # Install PM2 globally if not present
 if ! command -v pm2 &> /dev/null; then
     print_status "Installing PM2..."
+    git pull
     npm install -g pm2
 fi
 
