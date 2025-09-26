@@ -1,0 +1,61 @@
+name: Deploy to SSH Server
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Run tests
+      run: npm test
+      
+    - name: Deploy to server
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: 22
+        script: |
+          # Navigate to project directory
+          cd /opt/nasa-spaceapps-matchmaking-api || mkdir -p /opt/nasa-spaceapps-matchmaking-api && cd /opt/nasa-spaceapps-matchmaking-api
+          
+          # Clone or pull latest changes
+          if [ -d ".git" ]; then
+            git pull origin master
+          else
+            git clone https://github.com/${{ github.repository }} .
+          fi
+          
+          # Install dependencies and build
+          npm ci
+          npm run build
+          
+          # Restart the application (using PM2 if available, otherwise kill and restart)
+          if command -v pm2 &> /dev/null; then
+            pm2 restart nasa-matchmaking-api || pm2 start dist/main.js --name nasa-matchmaking-api
+          else
+            # Kill existing process if running
+            pkill -f "node.*dist/main.js" || true
+            # Start new process in background
+            nohup node dist/main.js > app.log 2>&1 &
+          fi

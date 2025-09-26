@@ -1,143 +1,67 @@
 #!/bin/bash
 
 # NASA Space Apps Matchmaking API Deployment Script
-# Usage: ./deploy.sh
+# This script handles the deployment process on the target server
 
-set -e
+set -e  # Exit on any error
 
-echo "🚀 Starting NASA Matchmaking API deployment..."
+PROJECT_DIR="/opt/nasa-spaceapps-matchmaking-api"
+LOG_FILE="$PROJECT_DIR/deploy.log"
 
-# Configuration
-APP_NAME="nasa-matchmaking-api"
-APP_DIR="/opt/$APP_NAME"
-SERVICE_FILE="$APP_NAME.service"
-NGINX_CONF="nginx.conf"
-USER="nodeuser"
+echo "Starting deployment at $(date)" | tee -a $LOG_FILE
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
-
-print_status() {
-    echo -e "${GREEN}[INFO]${NC} $1"
-}
-
-print_warning() {
-    echo -e "${YELLOW}[WARN]${NC} $1"
-}
-
-print_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
-
-# Check if running as root
-if [ "$EUID" -ne 0 ]; then
-    print_error "Please run this script as root (use sudo)"
-    exit 1
+# Create project directory if it doesn't exist
+if [ ! -d "$PROJECT_DIR" ]; then
+    echo "Creating project directory..." | tee -a $LOG_FILE
+    mkdir -p $PROJECT_DIR
 fi
 
-# Install Node.js and npm if not present
-if ! command -v node &> /dev/null; then
-    print_status "Installing Node.js..."
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-    apt-get install -y nodejs
+cd $PROJECT_DIR
+
+# Check if git repo exists
+if [ ! -d ".git" ]; then
+    echo "Initializing git repository..." | tee -a $LOG_FILE
+    git init
+    git remote add origin https://github.com/GhabryelHenrique/nasa-spaceapps-matchmaking-api.git
 fi
 
-# Install PM2 globally if not present
-if ! command -v pm2 &> /dev/null; then
-    print_status "Installing PM2..."
-    git pull
-    npm install -g pm2
-fi
+# Pull latest changes
+echo "Pulling latest changes..." | tee -a $LOG_FILE
+git fetch origin
+git reset --hard origin/master
 
-# Install nginx if not present
-if ! command -v nginx &> /dev/null; then
-    print_status "Installing Nginx..."
-    apt-get update
-    apt-get install -y nginx
-fi
+# Install dependencies
+echo "Installing dependencies..." | tee -a $LOG_FILE
+npm ci
 
-# Install MongoDB if not present
-if ! command -v mongod &> /dev/null; then
-    print_status "Installing MongoDB..."
-    wget -qO - https://www.mongodb.org/static/pgp/server-7.0.asc | apt-key add -
-    echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list
-    apt-get update
-    apt-get install -y mongodb-org
-    systemctl start mongod
-    systemctl enable mongod
-fi
-
-# Create application user if doesn't exist
-if ! id "$USER" &>/dev/null; then
-    print_status "Creating application user: $USER"
-    useradd -r -s /bin/false $USER
-fi
-
-# Create application directory
-print_status "Setting up application directory..."
-mkdir -p $APP_DIR
-chown $USER:$USER $APP_DIR
-
-# Copy application files
-print_status "Copying application files..."
-cp -r . $APP_DIR/
-cd $APP_DIR
-
-# Install dependencies and build
-print_status "Installing dependencies..."
-npm ci --only=production
-
-print_status "Building application..."
+# Build the application
+echo "Building application..." | tee -a $LOG_FILE
 npm run build
 
-# Set permissions
-chown -R $USER:$USER $APP_DIR
-
-# Setup environment file
-if [ ! -f "$APP_DIR/.env" ]; then
-    print_warning "Creating .env file from template..."
-    cp .env.example .env
-    print_warning "Please edit $APP_DIR/.env with your actual configuration"
+# Copy environment file if it exists
+if [ -f ".env.production" ]; then
+    cp .env.production .env
+    echo "Environment file updated" | tee -a $LOG_FILE
 fi
 
-# Setup systemd service
-print_status "Setting up systemd service..."
-cp $SERVICE_FILE /etc/systemd/system/
-systemctl daemon-reload
-systemctl enable $APP_NAME
-systemctl start $APP_NAME
-
-# Setup Nginx
-print_status "Configuring Nginx..."
-cp $NGINX_CONF /etc/nginx/sites-available/$APP_NAME
-ln -sf /etc/nginx/sites-available/$APP_NAME /etc/nginx/sites-enabled/
-rm -f /etc/nginx/sites-enabled/default
-nginx -t
-systemctl restart nginx
-
-# Setup firewall (if ufw is available)
-if command -v ufw &> /dev/null; then
-    print_status "Configuring firewall..."
-    ufw allow 22/tcp
-    ufw allow 80/tcp
-    ufw allow 443/tcp
-    ufw --force enable
+# Stop existing application
+echo "Stopping existing application..." | tee -a $LOG_FILE
+if command -v pm2 &> /dev/null; then
+    pm2 stop nasa-matchmaking-api || echo "PM2 process not found"
+    pm2 delete nasa-matchmaking-api || echo "PM2 process not found"
+else
+    pkill -f "node.*dist/main.js" || echo "No existing process found"
 fi
 
-print_status "Deployment completed! 🎉"
-print_status "Service status:"
-systemctl status $APP_NAME --no-pager -l
+# Start the application
+echo "Starting application..." | tee -a $LOG_FILE
+if command -v pm2 &> /dev/null; then
+    pm2 start dist/main.js --name nasa-matchmaking-api
+    pm2 save
+    echo "Application started with PM2" | tee -a $LOG_FILE
+else
+    nohup node dist/main.js > app.log 2>&1 &
+    echo "Application started with nohup" | tee -a $LOG_FILE
+fi
 
-print_warning "Next steps:"
-echo "1. Edit $APP_DIR/.env with your actual configuration"
-echo "2. Update nginx.conf with your actual domain name"
-echo "3. Set up SSL certificates (recommended: certbot)"
-echo "4. Restart services: sudo systemctl restart $APP_NAME nginx"
-
-print_status "Useful commands:"
-echo "- View logs: sudo journalctl -u $APP_NAME -f"
-echo "- Restart service: sudo systemctl restart $APP_NAME"
-echo "- Check service status: sudo systemctl status $APP_NAME"
+echo "Deployment completed successfully at $(date)" | tee -a $LOG_FILE

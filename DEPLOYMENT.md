@@ -1,4 +1,66 @@
-# NASA Space Apps Matchmaking API - Deployment Guide
+# Deployment Guide
+
+## GitHub Actions SSH Deployment Setup
+
+This project is configured for automatic deployment to your SSH server using GitHub Actions.
+
+### Required GitHub Secrets
+
+Go to your GitHub repository → Settings → Secrets and variables → Actions, and add these secrets:
+
+1. **SSH_HOST**: `31.97.171.230`
+2. **SSH_USERNAME**: `root`
+3. **SSH_PASSWORD**: `1029384756Gh@`
+
+### How it Works
+
+The deployment workflow (`.github/workflows/deploy.yml`) will:
+
+1. **Trigger on**: Push to `master` branch or manual workflow dispatch
+2. **Build Process**: Install dependencies, build the application, and run tests
+3. **Deploy Process**: Connect to your SSH server and:
+   - Clone/pull the latest code to `/opt/nasa-spaceapps-matchmaking-api`
+   - Install dependencies and build
+   - Restart the application using PM2 (if available) or fallback to nohup
+
+### Manual Deployment
+
+You can also deploy manually using the `deploy.sh` script:
+
+```bash
+# On your SSH server
+bash deploy.sh
+```
+
+### Server Requirements
+
+The deployment assumes your server has:
+- Node.js (will be handled by the deployment script)
+- Git
+- PM2 (recommended) or basic process management
+
+### Environment Variables
+
+Create a `.env.production` file in your repository root with production environment variables. This file will be copied to `.env` during deployment.
+
+### Security Recommendations
+
+**⚠️ IMPORTANT**: The current setup uses password-based SSH authentication. For better security, consider:
+
+1. **Switch to SSH keys**: Generate an SSH key pair and use `SSH_PRIVATE_KEY` instead of password
+2. **Create a dedicated deployment user**: Instead of using root, create a specific user for deployments
+3. **Use environment variables**: Store sensitive configuration in GitHub secrets instead of committing them
+
+### Monitoring
+
+After deployment, you can monitor your application:
+- View logs: `pm2 logs nasa-matchmaking-api` (if using PM2)
+- Check status: `pm2 status` (if using PM2)
+- Manual logs: `tail -f /opt/nasa-spaceapps-matchmaking-api/app.log`
+
+---
+
+# Manual Deployment Guide (Alternative)
 
 Este guia explica como fazer o deploy da API de matchmaking da NASA Space Apps em um servidor Linux com Nginx.
 
