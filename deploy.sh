@@ -5,7 +5,7 @@
 
 set -e  # Exit on any error
 
-PROJECT_DIR="/opt/nasa-spaceapps-matchmaking-api"
+PROJECT_DIR="/opt/nasa-matchmaking-api"
 LOG_FILE="$PROJECT_DIR/deploy.log"
 
 echo "Starting deployment at $(date)" | tee -a $LOG_FILE
