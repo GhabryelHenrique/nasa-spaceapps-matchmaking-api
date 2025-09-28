@@ -220,6 +220,10 @@ export class CreateParticipantProfileDto {
 
 export class UpdateParticipantProfileDto {
   @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
   @IsString()
   fullName?: string;
 
@@ -246,6 +250,30 @@ export class UpdateParticipantProfileDto {
   @IsOptional()
   @IsString()
   education?: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(16)
+  @Max(100)
+  age?: number;
+
+  @IsOptional()
+  @IsEnum(['masculine', 'feminine', 'non-binary', 'prefer-not-to-say'])
+  gender?: 'masculine' | 'feminine' | 'non-binary' | 'prefer-not-to-say';
+
+  @IsOptional()
+  @IsBoolean()
+  preferFemaleTeam?: boolean;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  challengesOfInterest?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  interestAreas?: string[];
 
   @IsOptional()
   @IsArray()

@@ -13,7 +13,8 @@
       "Bash(chmod:*)",
       "Bash(npm run start:prod:*)",
       "Bash(mkdir:*)",
-      "Bash(timeout 10 npm run start:dev)"
+      "Bash(timeout 10 npm run start:dev)",
+      "Bash(npm test:*)"
     ],
     "deny": [],
     "ask": []

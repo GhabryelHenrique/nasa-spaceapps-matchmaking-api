@@ -1,33 +1,32 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
   Body,
-  Query,
-  Param,
+  Controller,
+  Delete,
+  Get,
   HttpException,
   HttpStatus,
-  ValidationPipe,
   Inject,
+  Param,
+  Post,
+  Put,
+  Query,
+  ValidationPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
-import { ParticipantProfileService } from '../services/participant-profile.service';
-import { MatchmakingService } from '../services/matchmaking.service';
-import { EmailService } from '../services/email.service';
-import { NasaApiService } from '../services/nasa-api.service';
-import { NasaSyncService } from '../services/nasa-sync.service';
-import {
-  CreateParticipantProfileDto,
-  UpdateParticipantProfileDto,
-  FindMatchesDto,
-  SendMatchNotificationDto,
-} from '../dtos/matchmaking.dto';
-import { CompleteProfileDto } from '../dtos/profile-completion.dto';
+import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import type { LoggerPort } from '../application/ports/logger.port';
 import { LOGGER_TOKEN } from '../application/ports/tokens';
-import { auditLogger, performanceLogger } from '../infrastructure/config/logger.config';
+import {
+  CreateParticipantProfileDto,
+  FindMatchesDto,
+  SendMatchNotificationDto,
+  UpdateParticipantProfileDto,
+} from '../dtos/matchmaking.dto';
+import { CompleteProfileDto } from '../dtos/profile-completion.dto';
+import { EmailService } from '../services/email.service';
+import { MatchmakingService } from '../services/matchmaking.service';
+import { NasaApiService } from '../services/nasa-api.service';
+import { NasaSyncService } from '../services/nasa-sync.service';
+import { ParticipantProfileService } from '../services/participant-profile.service';
 
 @ApiTags('matchmaking')
 @Controller('matchmaking')
