@@ -12,7 +12,8 @@
       "Bash(npm uninstall:*)",
       "Bash(chmod:*)",
       "Bash(npm run start:prod:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(timeout 10 npm run start:dev)"
     ],
     "deny": [],
     "ask": []

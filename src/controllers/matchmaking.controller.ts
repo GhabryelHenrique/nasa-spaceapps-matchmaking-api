@@ -26,6 +26,7 @@ import {
 } from '../dtos/matchmaking.dto';
 import { CompleteProfileDto } from '../dtos/profile-completion.dto';
 import type { LoggerPort } from '../application/ports/logger.port';
+import { LOGGER_TOKEN } from '../application/ports/tokens';
 import { auditLogger, performanceLogger } from '../infrastructure/config/logger.config';
 
 @ApiTags('matchmaking')
@@ -37,7 +38,7 @@ export class MatchmakingController {
     private readonly emailService: EmailService,
     private readonly nasaApiService: NasaApiService,
     private readonly nasaSyncService: NasaSyncService,
-    @Inject('LoggerPort') private readonly logger: LoggerPort,
+    @Inject(LOGGER_TOKEN) private readonly logger: LoggerPort,
   ) {}
 
   // Profile Management Endpoints

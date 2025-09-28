@@ -13,6 +13,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiBody } from '@nestjs/s
 import { RegistrationService } from '../services/registration.service';
 import { CheckEmailDto, VerifyCodeDto } from '../dtos/registration.dto';
 import type { LoggerPort } from '../application/ports/logger.port';
+import { LOGGER_TOKEN } from '../application/ports/tokens';
 import { auditLogger, performanceLogger } from '../infrastructure/config/logger.config';
 
 @ApiTags('registration')
@@ -20,7 +21,7 @@ import { auditLogger, performanceLogger } from '../infrastructure/config/logger.
 export class RegistrationController {
   constructor(
     private readonly registrationService: RegistrationService,
-    @Inject('LoggerPort') private readonly logger: LoggerPort
+    @Inject(LOGGER_TOKEN) private readonly logger: LoggerPort
   ) {}
 
   @Get('check-email')
