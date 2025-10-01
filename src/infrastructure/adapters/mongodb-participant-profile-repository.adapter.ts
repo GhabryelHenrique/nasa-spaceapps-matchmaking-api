@@ -296,10 +296,16 @@ export class MongoDBParticipantProfileRepositoryAdapter implements ParticipantPr
     return {
       email: profile.email.value,
       fullName: profileJson.fullName,
+      phoneNumber: profileJson.phoneNumber,
       skills: profileJson.skills,
       expertiseLevel: profileJson.expertiseLevel,
       workExperience: profileJson.workExperience,
       education: profileJson.education,
+      age: profileJson.age,
+      gender: profileJson.gender,
+      preferFemaleTeam: profileJson.preferFemaleTeam,
+      challengesOfInterest: profileJson.challengesOfInterest,
+      interestAreas: profileJson.interestAreas,
       projects: profileJson.projects,
       preferences: profileJson.preferences,
       languages: profileJson.languages,
@@ -354,6 +360,10 @@ export class MongoDBParticipantProfileRepositoryAdapter implements ParticipantPr
       bio: document.bio,
       participationGoals: document.participationGoals,
       challengesInterests: document.challengesInterests,
+      gender: document.gender as 'masculine' | 'feminine' | 'non-binary' | 'prefer-not-to-say' | undefined,
+      preferFemaleTeam: document.preferFemaleTeam,
+      challengesOfInterest: document.challengesOfInterest,
+      interestAreas: document.interestAreas,
       googleSheetsData: document.googleSheetsData,
     });
   }

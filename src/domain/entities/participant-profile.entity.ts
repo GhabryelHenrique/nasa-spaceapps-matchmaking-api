@@ -217,6 +217,7 @@ export class ParticipantProfile {
       expertiseLevel: this.expertiseLevel,
       workExperience: this.workExperience,
       education: this.education,
+      age: this.age,
       projects: this.projects,
       preferences: this.preferences,
       languages: this.languages,
